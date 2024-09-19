@@ -1,0 +1,6 @@
+@SimbirHealth.Accounts_HostAddress = http://localhost:5023
+
+GET {{SimbirHealth.Accounts_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
