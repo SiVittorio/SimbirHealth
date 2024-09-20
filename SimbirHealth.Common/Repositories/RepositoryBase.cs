@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SimbirHealth.Common.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +25,11 @@ namespace SimbirHealth.Common.Repositories
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public async Task<List<TEntity>> GetListAsync() => await _db.Set<TEntity>().ToListAsync();
+        public IQueryable<TEntity> Query() => _db.Set<TEntity>().AsQueryable<TEntity>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public async Task<int> SaveChangesAsync(CancellationToken token) => await _db.SaveChangesAsync(token);
+        public async Task<int> SaveChangesAsync(CancellationToken token = default) => await _db.SaveChangesAsync(token);
     }
 }

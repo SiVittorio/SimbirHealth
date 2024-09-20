@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimbirHealth.Common.Interfaces.Repositories
+namespace SimbirHealth.Common.Repositories
 {
     public interface IRepositoryBase<TEntity>
     {
         /// <summary>
-        /// Получить список
+        /// Создать запрос
         /// </summary>
         /// <returns>Список сущностей</returns>
-        Task<List<TEntity>> GetListAsync();
+        IQueryable<TEntity> Query();
         /// <summary>
         /// Добавить сущность в БД
         /// </summary>
@@ -24,6 +24,6 @@ namespace SimbirHealth.Common.Interfaces.Repositories
         /// </summary>
         /// <param name="token"></param>
         /// <returns>Кол-во записанных элементов</returns>
-        Task<int> SaveChangesAsync(CancellationToken token);
+        Task<int> SaveChangesAsync(CancellationToken token = default);
     }
 }

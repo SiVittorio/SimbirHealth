@@ -14,7 +14,7 @@ namespace SimbirHealth.Data.Models.Account
         public Guid AccountGuid { get; set; }
         [PrimaryKey]
         public Guid RoleGuid { get; set; }
-        public Account Account { get; set; }
+        public AccountModel Account { get; set; }
         public Role Role { get; set; }
     }
 }

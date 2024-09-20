@@ -23,7 +23,7 @@ namespace SimbirHealth.Data.Models.Account
         public string RoleName { get; set; }
 
         [JsonIgnore]
-        public List<Account>? Accounts { get; set; }
+        public List<AccountModel>? Accounts { get; set; }
         [JsonIgnore]
         public List<AccountToRole>? AccountToRoles { get; set; }
     }

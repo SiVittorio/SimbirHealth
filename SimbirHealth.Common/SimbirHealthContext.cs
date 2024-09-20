@@ -12,7 +12,7 @@ namespace SimbirHealth.Common
             Database.EnsureCreated(); // create if not exist
         }
 
-        public DbSet<Account> Accounts { get; set; }
+        public DbSet<AccountModel> Accounts { get; set; }
         public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,7 +26,7 @@ namespace SimbirHealth.Common
                 new() { RoleName = PossibleRoles.User }
             };
 
-            var baseAccounts = new List<Account>()
+            var baseAccounts = new List<AccountModel>()
             {
                 new("default", "admin", "admin", Hasher.Hash("admin"), [baseRoles[0]]),
                 new("default", "manager", "manager", Hasher.Hash("manager"), [baseRoles[1]]),
@@ -36,13 +36,13 @@ namespace SimbirHealth.Common
 
             modelBuilder.Entity<Role>().HasData(baseRoles);
 
-            modelBuilder.Entity<Account>()
+            modelBuilder.Entity<AccountModel>()
                 .HasMany(e => e.Roles)
                 .WithMany(e => e.Accounts)
                 .UsingEntity<AccountToRole>();
 
             // Аккаунты по умолчанию 
-            modelBuilder.Entity<Account>().HasData(baseAccounts);
+            modelBuilder.Entity<AccountModel>().HasData(baseAccounts);
 
             modelBuilder.Entity<AccountToRole>().HasData(
                 new AccountToRole() { AccountGuid = baseAccounts[0].Guid, RoleGuid = baseRoles[0].Guid },

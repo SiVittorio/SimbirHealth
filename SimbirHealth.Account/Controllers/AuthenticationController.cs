@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SimbirHealth.Account.Models.Requests;
+using SimbirHealth.Account.Services.AuthenticationService;
 
 namespace SimbirHealth.Account.Controllers
 {
@@ -7,16 +9,22 @@ namespace SimbirHealth.Account.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly ILogger<AuthenticationController> _logger;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticationController(ILogger<AuthenticationController> logger)
+        public AuthenticationController(ILogger<AuthenticationController> logger,
+            IAuthenticationService authenticationService)
         {
             _logger = logger;
+            _authenticationService = authenticationService;
         }
 
+        /// <summary>
+        /// Регистрация нового аккаунта
+        /// </summary>
         [HttpPost("[action]")]
-        public async Task SignUp()
+        public async Task<IResult> SignUp(SignUpRequest request)
         {
-            throw new NotImplementedException();
+            return await _authenticationService.SignUp(request);
         }
 
         [HttpPost("[action]")]

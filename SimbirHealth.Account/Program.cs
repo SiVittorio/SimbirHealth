@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using SimbirHealth.Account.Services.AuthenticationService;
 using SimbirHealth.Common;
+using SimbirHealth.Common.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,12 @@ builder.Services.AddDbContext<SimbirHealthContext>(options =>
         builder.Configuration.GetConnectionString("MyPrivateConnection")
         )
     );
+
+#region DI
+builder.Services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
+#endregion
+
 
 var app = builder.Build();
 

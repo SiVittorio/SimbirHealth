@@ -11,13 +11,13 @@ namespace SimbirHealth.Data.Models.Account
     /// <summary>
     /// Аккаунт
     /// </summary>
-    public class Account : BaseEntity
+    public class AccountModel : BaseEntity
     {
-        public Account()
+        public AccountModel()
         {
         }
 
-        public Account(string lastName, string firstName, string username, string password, List<Role>? roles)
+        public AccountModel(string lastName, string firstName, string username, string password, List<Role>? roles)
         {
             LastName = lastName;
             FirstName = firstName;
