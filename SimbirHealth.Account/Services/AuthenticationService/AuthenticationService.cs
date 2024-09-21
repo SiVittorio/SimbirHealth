@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SimbirHealth.Account.Models.Requests;
+using SimbirHealth.Account.Services.TokenService;
 using SimbirHealth.Common.Repositories;
 using SimbirHealth.Common.Services;
 using SimbirHealth.Data.Models;
@@ -12,16 +13,29 @@ namespace SimbirHealth.Account.Services.AuthenticationService
     {
         private readonly IRepositoryBase<AccountModel> _accountRepository;
         private readonly IRepositoryBase<Role> _roleRepository;
+        private readonly IRepositoryBase<AccountToRole> _accToRoleRepository;
+        private readonly ITokenService _tokenService;
 
         public AuthenticationService(IRepositoryBase<AccountModel> accountRepository,
-            IRepositoryBase<Role> roleRepository)
+            IRepositoryBase<Role> roleRepository,
+            IRepositoryBase<AccountToRole> accToRoleRepository,
+            ITokenService tokenService)
         {
             _accountRepository = accountRepository;
             _roleRepository = roleRepository;
+            _accToRoleRepository = accToRoleRepository;
+            _tokenService = tokenService;
         }
-        public Task<IResult> SignIn(string username, string password)
+        public async Task<IResult> SignIn(string username, string password)
         {
-            throw new NotImplementedException();
+            var account = await _accountRepository.Query().Where(a => a.Username == username &&
+                a.Password == Hasher.Hash(password)).FirstOrDefaultAsync();
+            if (account != null)
+            {
+                return Results.Ok(_tokenService.GenerateToken(account));
+            }
+            else
+                return Results.BadRequest("Неверное имя пользователя или пароль");
         }
 
         public async Task<IResult> SignUp(SignUpRequest request)
@@ -32,8 +46,9 @@ namespace SimbirHealth.Account.Services.AuthenticationService
             else
             {
                 var userRole = await _roleRepository.Query().Where(r => r.RoleName == PossibleRoles.User).FirstAsync();
-                _accountRepository.Add(
-                    new AccountModel(request.LastName, request.FirstName, request.Username, Hasher.Hash(request.Password), [userRole]));
+                var user = new AccountModel(request.LastName, request.FirstName, request.Username, Hasher.Hash(request.Password), [userRole]);
+                _accToRoleRepository.Add( new() { Account = user, Role = userRole } );
+                _accountRepository.Add(user);
                 await _accountRepository.SaveChangesAsync();
 
                 return Results.Ok();

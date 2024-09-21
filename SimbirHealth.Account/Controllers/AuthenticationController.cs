@@ -28,9 +28,9 @@ namespace SimbirHealth.Account.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task SignIn()
+        public async Task<IResult> SignIn(string username, string password)
         {
-            throw new NotImplementedException();
+            return await _authenticationService.SignIn(username, password);
         }
 
         [HttpPut("[action]")]

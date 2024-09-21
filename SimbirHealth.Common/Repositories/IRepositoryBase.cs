@@ -11,13 +11,10 @@ namespace SimbirHealth.Common.Repositories
         /// <summary>
         /// Создать запрос
         /// </summary>
-        /// <returns>Список сущностей</returns>
         IQueryable<TEntity> Query();
         /// <summary>
         /// Добавить сущность в БД
         /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
         TEntity Add(TEntity entity);
         /// <summary>
         /// Сохранить изменения в БД
