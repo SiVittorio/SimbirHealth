@@ -15,6 +15,17 @@ namespace SimbirHealth.Data.Models.Account
     /// </summary>
     public class Role : BaseEntity
     {
+        public Role()
+        {
+        }
+
+        public Role(Guid guid, string roleName, DateTime dateCreate)
+        {
+            Guid = guid;
+            RoleName = roleName;
+            DateCreate = dateCreate;
+        }
+
         /// <summary>
         /// Название роли
         /// </summary>

@@ -25,6 +25,11 @@ namespace SimbirHealth.Common.Repositories
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public void Delete(TEntity entity) => _db.Remove(entity);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public IQueryable<TEntity> Query() => _db.Set<TEntity>().AsQueryable<TEntity>();
 
         /// <summary>

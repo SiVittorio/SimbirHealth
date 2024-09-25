@@ -26,18 +26,32 @@ namespace SimbirHealth.Account.Services.AuthenticationService
             _accToRoleRepository = accToRoleRepository;
             _tokenService = tokenService;
         }
+        /// <summary>
+        /// Войти в аккаунт и получить пару JWT (access + refresh)
+        /// </summary>
+        /// <param name="username">Имя пользователя</param>
+        /// <param name="password">Пароль</param>
+        /// <returns></returns>
         public async Task<IResult> SignIn(string username, string password)
         {
-            var account = await _accountRepository.Query().Where(a => a.Username == username &&
+            var account = await _accountRepository.Query()
+                .Include(a => a.Roles)
+                .Where(a => a.Username == username &&
                 a.Password == Hasher.Hash(password)).FirstOrDefaultAsync();
             if (account != null)
             {
-                return Results.Ok(_tokenService.GenerateToken(account));
+                var tokens = await _tokenService.GenerateTokens(account);
+
+                return Results.Ok(new {tokens.Item1, tokens.Item2});
             }
             else
                 return Results.BadRequest("Неверное имя пользователя или пароль");
         }
-
+        /// <summary>
+        /// Зарегистрировать новый аккаунт в системе
+        /// </summary>
+        /// <param name="request">Запрос на регистрацию, содержащий данные пользователя</param>
+        /// <returns></returns>
         public async Task<IResult> SignUp(SignUpRequest request)
         {
             var test = await _accountRepository.Query().Include(p => p.Roles).ToListAsync(); 
@@ -46,7 +60,7 @@ namespace SimbirHealth.Account.Services.AuthenticationService
             else
             {
                 var userRole = await _roleRepository.Query().Where(r => r.RoleName == PossibleRoles.User).FirstAsync();
-                var user = new AccountModel(request.LastName, request.FirstName, request.Username, Hasher.Hash(request.Password), [userRole]);
+                var user = new AccountModel(request.LastName, request.FirstName, request.Username, Hasher.Hash(request.Password));
                 _accToRoleRepository.Add( new() { Account = user, Role = userRole } );
                 _accountRepository.Add(user);
                 await _accountRepository.SaveChangesAsync();

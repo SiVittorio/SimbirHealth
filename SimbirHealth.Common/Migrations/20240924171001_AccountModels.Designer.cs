@@ -12,7 +12,7 @@ using SimbirHealth.Common;
 namespace SimbirHealth.Common.Migrations
 {
     [DbContext(typeof(SimbirHealthContext))]
-    [Migration("20240920175356_Account-Models")]
+    [Migration("20240924171001_AccountModels")]
     partial class AccountModels
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace SimbirHealth.Common.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("SimbirHealth.Data.Models.Account.Account", b =>
+            modelBuilder.Entity("SimbirHealth.Data.Models.Account.AccountModel", b =>
                 {
                     b.Property<Guid>("Guid")
                         .ValueGeneratedOnAdd()
@@ -58,7 +58,7 @@ namespace SimbirHealth.Common.Migrations
                         new
                         {
                             Guid = new Guid("9dd5f073-265b-4b57-8268-d0a53355b7e7"),
-                            DateCreate = new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(417),
+                            DateCreate = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             FirstName = "admin",
                             LastName = "default",
                             Password = "21232F297A57A5A743894A0E4A801FC3",
@@ -67,7 +67,7 @@ namespace SimbirHealth.Common.Migrations
                         new
                         {
                             Guid = new Guid("dfa3ea95-21e1-44c6-9393-5ab531d39acd"),
-                            DateCreate = new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(436),
+                            DateCreate = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             FirstName = "manager",
                             LastName = "default",
                             Password = "1D0258C2440A8D19E716292B231E3190",
@@ -76,7 +76,7 @@ namespace SimbirHealth.Common.Migrations
                         new
                         {
                             Guid = new Guid("2018473b-0ec4-4702-bbaf-667e4843a48a"),
-                            DateCreate = new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(465),
+                            DateCreate = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             FirstName = "doctor",
                             LastName = "default",
                             Password = "F9F16D97C90D8C6F2CAB37BB6D1F1992",
@@ -85,7 +85,7 @@ namespace SimbirHealth.Common.Migrations
                         new
                         {
                             Guid = new Guid("c6645389-3937-4d85-80e2-05437a15241b"),
-                            DateCreate = new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(479),
+                            DateCreate = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             FirstName = "user",
                             LastName = "default",
                             Password = "EE11CBB19052E40B07AAC0CA060C23EE",
@@ -151,32 +151,32 @@ namespace SimbirHealth.Common.Migrations
                         new
                         {
                             Guid = new Guid("816dca08-d141-4fd1-8f34-7d7a4322a53d"),
-                            DateCreate = new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(202),
+                            DateCreate = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             RoleName = "Admin"
                         },
                         new
                         {
                             Guid = new Guid("ac5328b1-acec-4739-b570-90bf511a3e02"),
-                            DateCreate = new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(208),
+                            DateCreate = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             RoleName = "Manager"
                         },
                         new
                         {
                             Guid = new Guid("929a852e-4d8e-4595-9fee-00076e7a8a7b"),
-                            DateCreate = new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(210),
+                            DateCreate = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             RoleName = "Doctor"
                         },
                         new
                         {
                             Guid = new Guid("803f5318-c437-47ce-8781-97719a4095ba"),
-                            DateCreate = new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(211),
+                            DateCreate = new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc),
                             RoleName = "User"
                         });
                 });
 
             modelBuilder.Entity("SimbirHealth.Data.Models.Account.AccountToRole", b =>
                 {
-                    b.HasOne("SimbirHealth.Data.Models.Account.Account", "Account")
+                    b.HasOne("SimbirHealth.Data.Models.Account.AccountModel", "Account")
                         .WithMany("AccountToRoles")
                         .HasForeignKey("AccountGuid")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -193,7 +193,7 @@ namespace SimbirHealth.Common.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("SimbirHealth.Data.Models.Account.Account", b =>
+            modelBuilder.Entity("SimbirHealth.Data.Models.Account.AccountModel", b =>
                 {
                     b.Navigation("AccountToRoles");
                 });

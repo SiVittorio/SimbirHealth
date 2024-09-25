@@ -17,6 +17,11 @@ namespace SimbirHealth.Common.Repositories
         /// </summary>
         TEntity Add(TEntity entity);
         /// <summary>
+        /// Удалить сущность из БД
+        /// </summary>
+        /// <param name="entity"></param>
+        void Delete(TEntity entity);
+        /// <summary>
         /// Сохранить изменения в БД
         /// </summary>
         /// <param name="token"></param>

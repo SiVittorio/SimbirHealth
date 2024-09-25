@@ -4,6 +4,6 @@ namespace SimbirHealth.Account.Services.TokenService
 {
     public interface ITokenService
     {
-        string GenerateToken(AccountModel account);
+        Task<(string, string)> GenerateTokens(AccountModel account);
     }
 }

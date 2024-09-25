@@ -71,10 +71,10 @@ namespace SimbirHealth.Common.Migrations
                 columns: new[] { "Guid", "DateCreate", "FirstName", "LastName", "Password", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("2018473b-0ec4-4702-bbaf-667e4843a48a"), new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(465), "doctor", "default", "F9F16D97C90D8C6F2CAB37BB6D1F1992", "doctor" },
-                    { new Guid("9dd5f073-265b-4b57-8268-d0a53355b7e7"), new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(417), "admin", "default", "21232F297A57A5A743894A0E4A801FC3", "admin" },
-                    { new Guid("c6645389-3937-4d85-80e2-05437a15241b"), new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(479), "user", "default", "EE11CBB19052E40B07AAC0CA060C23EE", "user" },
-                    { new Guid("dfa3ea95-21e1-44c6-9393-5ab531d39acd"), new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(436), "manager", "default", "1D0258C2440A8D19E716292B231E3190", "manager" }
+                    { new Guid("2018473b-0ec4-4702-bbaf-667e4843a48a"), new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc), "doctor", "default", "F9F16D97C90D8C6F2CAB37BB6D1F1992", "doctor" },
+                    { new Guid("9dd5f073-265b-4b57-8268-d0a53355b7e7"), new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc), "admin", "default", "21232F297A57A5A743894A0E4A801FC3", "admin" },
+                    { new Guid("c6645389-3937-4d85-80e2-05437a15241b"), new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc), "user", "default", "EE11CBB19052E40B07AAC0CA060C23EE", "user" },
+                    { new Guid("dfa3ea95-21e1-44c6-9393-5ab531d39acd"), new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc), "manager", "default", "1D0258C2440A8D19E716292B231E3190", "manager" }
                 });
 
             migrationBuilder.InsertData(
@@ -82,10 +82,10 @@ namespace SimbirHealth.Common.Migrations
                 columns: new[] { "Guid", "DateCreate", "RoleName" },
                 values: new object[,]
                 {
-                    { new Guid("803f5318-c437-47ce-8781-97719a4095ba"), new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(211), "User" },
-                    { new Guid("816dca08-d141-4fd1-8f34-7d7a4322a53d"), new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(202), "Admin" },
-                    { new Guid("929a852e-4d8e-4595-9fee-00076e7a8a7b"), new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(210), "Doctor" },
-                    { new Guid("ac5328b1-acec-4739-b570-90bf511a3e02"), new DateTime(2024, 9, 20, 17, 53, 56, 254, DateTimeKind.Utc).AddTicks(208), "Manager" }
+                    { new Guid("803f5318-c437-47ce-8781-97719a4095ba"), new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc), "User" },
+                    { new Guid("816dca08-d141-4fd1-8f34-7d7a4322a53d"), new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc), "Admin" },
+                    { new Guid("929a852e-4d8e-4595-9fee-00076e7a8a7b"), new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc), "Doctor" },
+                    { new Guid("ac5328b1-acec-4739-b570-90bf511a3e02"), new DateTime(2024, 9, 20, 0, 0, 0, 0, DateTimeKind.Utc), "Manager" }
                 });
 
             migrationBuilder.InsertData(

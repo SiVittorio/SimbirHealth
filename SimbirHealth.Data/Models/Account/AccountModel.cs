@@ -17,7 +17,17 @@ namespace SimbirHealth.Data.Models.Account
         {
         }
 
-        public AccountModel(string lastName, string firstName, string username, string password, List<Role>? roles)
+        public AccountModel(Guid guid, string lastName, string firstName, string username, string password, DateTime dateCreate)
+        {
+            Guid = guid;
+            LastName = lastName;
+            FirstName = firstName;
+            Username = username;
+            Password = password;
+            DateCreate = dateCreate;
+        }
+
+        public AccountModel(string lastName, string firstName, string username, string password)
         {
             LastName = lastName;
             FirstName = firstName;
