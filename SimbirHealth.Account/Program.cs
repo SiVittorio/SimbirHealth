@@ -47,6 +47,15 @@ builder.Services.AddDbContext<SimbirHealthContext>(options =>
         builder.Configuration.GetConnectionString("MyPrivateConnection")
         )
     );
+// builder.Services.AddAuthentication(options => 
+// {
+//     options.DefaultAuthenticateScheme = AuthenticationSchemes.HmacSha256;
+// })
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("All", policy => policy.RequireClaim("userGuid"));
+});
+
 
 IdentityModelEventSource.ShowPII = true;
 
@@ -69,6 +78,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

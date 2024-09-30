@@ -35,7 +35,7 @@ namespace SimbirHealth.Account.Controllers
         }
 
         [HttpPut("[action]")]
-        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(Policy = "All")]
         public async Task<IResult> SignOut()
         {
             throw new NotImplementedException();
