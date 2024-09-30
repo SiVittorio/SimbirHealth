@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimbirHealth.Account.Models.Requests;
 using SimbirHealth.Account.Services.AuthenticationService;
@@ -35,10 +36,10 @@ namespace SimbirHealth.Account.Controllers
         }
 
         [HttpPut("[action]")]
-        [Authorize(Policy = "All")]
+        [Authorize]
         public async Task<IResult> SignOut()
         {
-            throw new NotImplementedException();
+            return Results.Ok();
         }
 
         [HttpGet("[action]")]

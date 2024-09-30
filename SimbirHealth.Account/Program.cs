@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
@@ -47,10 +49,7 @@ builder.Services.AddDbContext<SimbirHealthContext>(options =>
         builder.Configuration.GetConnectionString("MyPrivateConnection")
         )
     );
-// builder.Services.AddAuthentication(options => 
-// {
-//     options.DefaultAuthenticateScheme = AuthenticationSchemes.HmacSha256;
-// })
+builder.Services.AddAuthentication().AddJwtBearer(option =>)   
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("All", policy => policy.RequireClaim("userGuid"));
