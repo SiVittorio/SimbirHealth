@@ -4,7 +4,9 @@ namespace SimbirHealth.Account.Services.AuthenticationService
 {
     public interface IAuthenticationService
     {
-        public Task<IResult> SignUp(SignUpRequest request);
-        public Task<IResult> SignIn(string username, string password);
+        Task<IResult> SignUp(SignUpRequest request);
+        Task<IResult> SignIn(SignInRequest request);
+        Task<IResult> ValidateToken(string token);
+        Task<IResult> RefreshToken(string refreshToken);
     }
 }

@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Toolbelt.ComponentModel.DataAnnotations.Schema.V5;
 
@@ -15,10 +17,11 @@ namespace SimbirHealth.Data.Models.Account
     public class RefreshToken
     {
         public RefreshToken() { }
-        public RefreshToken(string Username)
+        public RefreshToken(string Username, DateTime expiredDate, Guid accountGuid)
         {
             Token = string.Format("{0}{1}", Guid.NewGuid().ToString(), Username);
-            DateCreate = DateTime.UtcNow;
+            ExpiredDate = expiredDate;
+            AccountGuid = accountGuid;
         }
 
         /// <summary>
@@ -27,8 +30,20 @@ namespace SimbirHealth.Data.Models.Account
         [Key]
         public string Token { get; set; }
         /// <summary>
-        /// Дата создания токена
+        /// Срок годности токена
         /// </summary>
-        public DateTime DateCreate { get; set; }
+        [Required]
+        public DateTime ExpiredDate { get; set; }
+        /// <summary>
+        /// Аккаунт-владелец токена
+        /// </summary>
+        [JsonIgnore]
+        [Required]
+        [IndexColumn(IsUnique = true)]
+        public AccountModel Account{ get; set; }
+        [ForeignKey(nameof(Account))]
+        [JsonIgnore]
+        [IndexColumn(IsUnique = true)]
+        public Guid AccountGuid { get; set; }
     }
 }

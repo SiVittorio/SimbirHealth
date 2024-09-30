@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SimbirHealth.Account.Models.Requests;
 using SimbirHealth.Account.Services.AuthenticationService;
 
@@ -28,27 +29,28 @@ namespace SimbirHealth.Account.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IResult> SignIn(string username, string password)
+        public async Task<IResult> SignIn(SignInRequest request)
         {
-            return await _authenticationService.SignIn(username, password);
+            return await _authenticationService.SignIn(request);
         }
 
         [HttpPut("[action]")]
-        public async Task SignOut()
+        //[Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<IResult> SignOut()
         {
             throw new NotImplementedException();
         }
 
         [HttpGet("[action]")]
-        public async Task Validate()
+        public async Task<IResult> Validate([FromQuery] string accessToken)
         {
-            throw new NotImplementedException();
+            return await _authenticationService.ValidateToken(accessToken);
         }
 
         [HttpPost("[action]")]
-        public async Task Refresh()
+        public async Task<IResult> Refresh([FromBody] string refreshToken)
         {
-            throw new NotImplementedException();
+            return await _authenticationService.RefreshToken(refreshToken);
         }
     }
 }

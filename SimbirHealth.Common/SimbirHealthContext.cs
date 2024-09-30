@@ -25,6 +25,12 @@ namespace SimbirHealth.Common
                 .WithMany(e => e.Accounts)
                 .UsingEntity<AccountToRole>();
             #endregion
+            #region One to one
+            modelBuilder.Entity<AccountModel>()
+                .HasOne(e => e.RefreshToken)
+                .WithOne(e => e.Account)
+                .HasForeignKey<RefreshToken>(e => e.AccountGuid);
+            #endregion
 
             #region Seed Models
             modelBuilder.Entity<Role>().HasData(BaseDbModels.Roles);

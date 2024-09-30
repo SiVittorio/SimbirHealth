@@ -1,10 +1,12 @@
 ﻿using SimbirHealth.Data.Models._Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Toolbelt.ComponentModel.DataAnnotations.Schema.V5;
 
 namespace SimbirHealth.Data.Models.Account
 {
@@ -48,6 +50,7 @@ namespace SimbirHealth.Data.Models.Account
         /// <summary>
         /// Никнейм пользователя аккаунта
         /// </summary>
+        [IndexColumn(IsUnique = true)]
         public string Username { get; set; }
 
         /// <summary>
@@ -59,5 +62,9 @@ namespace SimbirHealth.Data.Models.Account
         public List<Role>? Roles { get; set; }
         [JsonIgnore]
         public List<AccountToRole>? AccountToRoles { get; set; }
+
+        [JsonIgnore]
+        [IndexColumn(IsUnique = true)]
+        public RefreshToken? RefreshToken { get; set; }
     }
 }
