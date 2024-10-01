@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
@@ -11,11 +12,11 @@ using SimbirHealth.Common.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
-
-builder.Services.AddControllers();
+var services = builder.Services;
+services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(swagger =>
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen(swagger =>
 {
     swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
@@ -44,13 +45,23 @@ builder.Services.AddSwaggerGen(swagger =>
 );
 
 // Configure db context
-builder.Services.AddDbContext<SimbirHealthContext>(options =>
+services.AddDbContext<SimbirHealthContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("MyPrivateConnection")
         )
     );
-builder.Services.AddAuthentication().AddJwtBearer(option =>)   
-builder.Services.AddAuthorization(options =>
+#region DI
+services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+services.AddTransient<IAuthenticationService, AuthenticationService>();
+services.AddScoped<ITokenService, TokenService>();
+#endregion
+
+var jwtSection = builder.Configuration.GetSection(JwtInfo.SectionName);
+services.Configure<JwtInfo>(jwtSection);
+
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
+    options => options.TokenValidationParameters = AccountTokenValidationParameters.DefaultParameters(jwtSection.Get<JwtInfo>()!));
+services.AddAuthorization(options =>
 {
     options.AddPolicy("All", policy => policy.RequireClaim("userGuid"));
 });
@@ -58,13 +69,7 @@ builder.Services.AddAuthorization(options =>
 
 IdentityModelEventSource.ShowPII = true;
 
-#region DI
-builder.Services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-builder.Services.AddTransient<IAuthenticationService, AuthenticationService>();
-builder.Services.AddScoped<ITokenService,  TokenService>();
-#endregion
 
-builder.Services.Configure<JwtInfo>(builder.Configuration.GetSection(JwtInfo.SectionName));
 
 var app = builder.Build();
 

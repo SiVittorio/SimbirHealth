@@ -42,24 +42,9 @@ namespace SimbirHealth.Account.Services.TokenService
         /// </summary>
         public async Task<IResult> ValidateToken(string token)
         {
-            var validationParameters = new TokenValidationParameters()
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(new HMACSHA256(Encoding.UTF8.GetBytes(_jwtInfo.SecretKey)).Key),
-                ValidIssuer = _jwtInfo.IssuerName,
-                ValidateLifetime = true,
-                ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
-                ValidateAudience = false
-            };
-            
-            try { 
-                var claims = new JwtSecurityTokenHandler().ValidateToken(token, validationParameters, out var validToken);
-                return Results.Ok();
-            }
-            catch (SecurityTokenValidationException e)
-            {
-                return Results.BadRequest(e.Message);
-            }
+            var result = await new JwtSecurityTokenHandler().ValidateTokenAsync(token,
+                    AccountTokenValidationParameters.DefaultParameters(_jwtInfo));
+            return result.IsValid ? Results.Ok() : Results.BadRequest(result.Exception.Message);
         }
         public async Task<(string, string)?> RefreshToken(string refreshToken)
         {
