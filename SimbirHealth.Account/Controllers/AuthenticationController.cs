@@ -28,26 +28,44 @@ namespace SimbirHealth.Account.Controllers
         {
             return await _authenticationService.SignUp(request);
         }
-
+        /// <summary>
+        /// Получение новой пары jwt пользователя
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("[action]")]
         public async Task<IResult> SignIn(SignInRequest request)
         {
             return await _authenticationService.SignIn(request);
         }
-
+        /// <summary>
+        /// Выход из аккаунта
+        /// </summary>
+        /// <remarks>
+        /// Только авторизованные пользователи
+        /// </remarks>
+        /// <returns></returns>
         [HttpPut("[action]")]
         [Authorize]
         public async Task<IResult> SignOut()
         {
             return Results.Ok();
         }
-
+        /// <summary>
+        /// Интроспекция токена
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
         [HttpGet("[action]")]
         public async Task<IResult> Validate([FromQuery] string accessToken)
         {
             return await _authenticationService.ValidateToken(accessToken);
         }
-
+        /// <summary>
+        ///  Обновление пары токенов
+        /// </summary>
+        /// <param name="refreshToken"></param>
+        /// <returns></returns>
         [HttpPost("[action]")]
         public async Task<IResult> Refresh([FromBody] string refreshToken)
         {

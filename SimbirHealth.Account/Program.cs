@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using SimbirHealth.Account.Models.Info;
@@ -41,6 +42,11 @@ services.AddSwaggerGen(swagger =>
                 new string[] {}
         }
     });
+
+    var basePath = AppContext.BaseDirectory;
+
+    var xmlPath = Path.Combine(basePath, "SimbirHealth.Account.xml");
+    swagger.IncludeXmlComments(xmlPath);
 }
 );
 
