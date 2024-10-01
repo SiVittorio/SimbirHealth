@@ -49,6 +49,7 @@ namespace SimbirHealth.Account.Controllers
         [Authorize]
         public async Task<IResult> SignOut()
         {
+            await _authenticationService.SignOut(Request.Headers.Authorization.ToString());
             return Results.Ok();
         }
         /// <summary>

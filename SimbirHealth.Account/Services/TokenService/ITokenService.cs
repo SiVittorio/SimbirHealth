@@ -1,4 +1,5 @@
-﻿using SimbirHealth.Data.Models.Account;
+﻿using Microsoft.IdentityModel.Tokens;
+using SimbirHealth.Data.Models.Account;
 
 namespace SimbirHealth.Account.Services.TokenService
 {
@@ -6,6 +7,7 @@ namespace SimbirHealth.Account.Services.TokenService
     {
         Task<(string, string)> GenerateTokens(AccountModel account);
         Task<(string, string)?> RefreshToken(string refreshToken);
-        Task<IResult> ValidateToken(string token);
+        Task<TokenValidationResult> ValidateToken(string token);
+        Task DeactivateTokens(string accessToken, AccountModel account);
     }
 }

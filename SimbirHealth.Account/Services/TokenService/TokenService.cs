@@ -18,9 +18,9 @@ namespace SimbirHealth.Account.Services.TokenService
         private readonly JwtInfo _jwtInfo;
         private readonly IRepositoryBase<RefreshToken> _refreshTokenRepository;
 
+
         public TokenService(IOptions<JwtInfo> options,
-            IRepositoryBase<RefreshToken> refreshTokenRepository,
-            IRepositoryBase<AccountModel> accountsRepository)
+            IRepositoryBase<RefreshToken> refreshTokenRepository)
         {
             _jwtInfo = options.Value;
             _refreshTokenRepository = refreshTokenRepository;
@@ -40,12 +40,17 @@ namespace SimbirHealth.Account.Services.TokenService
         /// <summary>
         /// Проверка подписи токена, издателя, времени жизни и алгоритма шифрования
         /// </summary>
-        public async Task<IResult> ValidateToken(string token)
+        public async Task<TokenValidationResult> ValidateToken(string token)
         {
             var result = await new JwtSecurityTokenHandler().ValidateTokenAsync(token,
                     AccountTokenValidationParameters.DefaultParameters(_jwtInfo));
-            return result.IsValid ? Results.Ok() : Results.BadRequest(result.Exception.Message);
+            return result;
         }
+        /// <summary>
+        /// Обновить access-токен пользователя, также обновить его refresh-токен в БД
+        /// </summary>
+        /// <param name="refreshToken"></param>
+        /// <returns></returns>
         public async Task<(string, string)?> RefreshToken(string refreshToken)
         {
             var tokenModel = await CheckRefreshToken(refreshToken);
@@ -56,6 +61,11 @@ namespace SimbirHealth.Account.Services.TokenService
             }
             return null;
         }
+        public async Task DeactivateTokens(string accessToken, AccountModel account)
+        {
+            await RemoveRefreshToken(account);
+        }
+
 
 
         private JwtSecurityToken GenerateAccessToken(AccountModel account)
@@ -83,17 +93,26 @@ namespace SimbirHealth.Account.Services.TokenService
         }
         private async Task<RefreshToken> GenerateRefreshToken(AccountModel account)
         {
-            var oldRefreshToken = await CheckRefreshToken(account.Username);
-            if (oldRefreshToken != null)
-            {
-                _refreshTokenRepository.Delete(oldRefreshToken);
-            }
-            var token = new RefreshToken(account.Username, DateTime.UtcNow.AddDays(_jwtInfo.RefreshLiveDays), account.Guid);
+            RefreshToken? oldRefreshToken = await RemoveRefreshToken(account);
+            var token = new RefreshToken(account.Username,
+                DateTime.UtcNow.AddDays(_jwtInfo.RefreshLiveDays),
+                account.Guid);
             _refreshTokenRepository.Add(token);
 
             await _refreshTokenRepository.SaveChangesAsync();
 
             return token;
+        }
+
+        private async Task<RefreshToken?> RemoveRefreshToken(AccountModel account)
+        {
+            var oldRefreshToken = await CheckRefreshToken(account.Username);
+            if (oldRefreshToken != null)
+            {
+                _refreshTokenRepository.Delete(oldRefreshToken);
+                await _refreshTokenRepository.SaveChangesAsync();
+            }
+            return oldRefreshToken;
         }
     }
 }

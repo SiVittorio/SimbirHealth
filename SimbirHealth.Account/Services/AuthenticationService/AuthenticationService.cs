@@ -78,7 +78,10 @@ namespace SimbirHealth.Account.Services.AuthenticationService
         /// <returns></returns>
         public async Task<IResult> ValidateToken(string token)
         {
-            return await _tokenService.ValidateToken(token);
+            var validationResult = await _tokenService.ValidateToken(token);
+            return validationResult.IsValid ? 
+                Results.Ok() : 
+                Results.BadRequest(validationResult.Exception.ToString());
         }
 
         public async Task<IResult> RefreshToken(string refreshToken)
@@ -87,7 +90,33 @@ namespace SimbirHealth.Account.Services.AuthenticationService
             if (tokens != null)
                 return Results.Ok(new { AccessToken = tokens.Value.Item1, RefreshToken = tokens.Value.Item2 });
             else
-                return Results.BadRequest("Необходима аунтентификация");
+                return Results.Unauthorized();
+        }
+        // TODO пока реализован только отзыв refresh-токена, возможно нужно добавить реализацию access-blacklist
+        public async Task<IResult> SignOut(string token)
+        {
+            token = token.Replace("Bearer ", "");
+            var validationResult = await _tokenService.ValidateToken(token);
+            var claims = validationResult.Claims;
+            if (claims.ContainsKey("userGuid"))
+            {
+                var accGuid = Guid.Parse((string)claims["userGuid"]);
+                var acc = await _accountRepository
+                    .Query()
+                    .Where(a => a.Guid == accGuid)
+                    .FirstOrDefaultAsync();
+                if (acc != null)
+                {
+                    await _tokenService.DeactivateTokens(token, acc);
+                    return Results.Ok();
+                }
+                else
+                {
+                    return Results.BadRequest("Не найден владелец токена");
+                }
+
+            }
+            return Results.BadRequest("Токен не содержит необходимую информацию");
         }
     }
 }

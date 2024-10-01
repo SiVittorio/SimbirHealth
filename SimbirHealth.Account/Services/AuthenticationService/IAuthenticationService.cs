@@ -8,5 +8,6 @@ namespace SimbirHealth.Account.Services.AuthenticationService
         Task<IResult> SignIn(SignInRequest request);
         Task<IResult> ValidateToken(string token);
         Task<IResult> RefreshToken(string refreshToken);
+        Task<IResult> SignOut(string token);
     }
 }
