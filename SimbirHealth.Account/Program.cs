@@ -53,7 +53,7 @@ services.AddSwaggerGen(swagger =>
 // Configure db context
 services.AddDbContext<SimbirHealthContext>(options =>
     options.UseNpgsql(
-        builder.Configuration.GetConnectionString("MyPrivateConnection")
+        builder.Configuration.GetConnectionString("DefaultConnection")
         )
     );
 #region DI
@@ -82,7 +82,6 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

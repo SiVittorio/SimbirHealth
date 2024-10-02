@@ -1,10 +1,12 @@
+version: "3.4"
+
 services:
   simbirhealth-account:
     container_name: simbirhealth-account
     hostname: simbirhealth-account
     restart: always
-    # environment:
-    #   - ASPNETCORE_ENVIRONMENT=Production
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
     build:
       context: .
       dockerfile: SimbirHealth.Account/Dockerfile
@@ -12,13 +14,15 @@ services:
     - "8080:8080"
 
   db:
-    image: postgres
+    image: postgres:latest
     container_name: db
+    hostname: db
     restart: always
     environment:
-      POSTGRES_USER: postgres  
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: simbir_health
+    - POSTGRES_DB=simbir_health
+    - POSTGRES_USER=postgres  
+    - POSTGRES_PASSWORD=postgres
     ports:
-    - "5432:5432"
+    - "5434:5432"
+    
         

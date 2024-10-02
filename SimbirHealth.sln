@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimbirHealth.Data", "Simbir
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimbirHealth.Account", "SimbirHealth.Account\SimbirHealth.Account.csproj", "{4ABD7D5C-8AE9-42E3-86B8-B7651073255D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{164F1A92-B541-4C71-9A2A-CC387BF8756E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{53FA3727-9A6C-4410-B739-8CA4A5220EF1}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
