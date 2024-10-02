@@ -75,7 +75,7 @@ services.AddAuthorization(options =>
 
 IdentityModelEventSource.ShowPII = true;
 
-
+builder.WebHost.UseKestrel().UseUrls("http://*:8080").UseIISIntegration();
 
 var app = builder.Build();
 

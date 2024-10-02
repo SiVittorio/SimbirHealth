@@ -3,14 +3,13 @@ services:
     container_name: simbirhealth-account
     hostname: simbirhealth-account
     restart: always
-    environment:
-      - ASPNETCORE_URLS=http://*:8001
+    # environment:
     #   - ASPNETCORE_ENVIRONMENT=Production
     build:
       context: .
       dockerfile: SimbirHealth.Account/Dockerfile
     ports:
-    - "8001:80"
+    - "8080:8080"
 
   db:
     image: postgres
