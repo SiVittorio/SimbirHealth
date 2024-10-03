@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SimbirHealth.Account.Models.Requests;
+using SimbirHealth.Account.Models.Requests.Authentication;
 using SimbirHealth.Account.Services.TokenService;
 using SimbirHealth.Common.Repositories;
 using SimbirHealth.Common.Services;
@@ -68,7 +68,7 @@ namespace SimbirHealth.Account.Services.AuthenticationService
                 _accountRepository.Add(user);
                 await _accountRepository.SaveChangesAsync();
 
-                return Results.Ok();
+                return Results.Created();
             }
         }
         /// <summary>

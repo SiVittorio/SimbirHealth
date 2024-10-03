@@ -1,4 +1,4 @@
-﻿using SimbirHealth.Account.Models.Requests;
+﻿using SimbirHealth.Account.Models.Requests.Authentication;
 
 namespace SimbirHealth.Account.Services.AuthenticationService
 {

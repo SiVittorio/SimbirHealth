@@ -26,8 +26,4 @@
     <ProjectReference Include="..\SimbirHealth.Common\SimbirHealth.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\AccountService\" />
-  </ItemGroup>
-
 </Project>

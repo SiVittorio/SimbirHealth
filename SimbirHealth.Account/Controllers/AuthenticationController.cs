@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SimbirHealth.Account.Models.Requests;
+using SimbirHealth.Account.Models.Requests.Authentication;
 using SimbirHealth.Account.Services.AuthenticationService;
 
 namespace SimbirHealth.Account.Controllers

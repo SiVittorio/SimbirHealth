@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using SimbirHealth.Account.Models.Info;
+using SimbirHealth.Account.Services.AccountService;
 using SimbirHealth.Account.Services.AuthenticationService;
 using SimbirHealth.Account.Services.TokenService;
 using SimbirHealth.Common;
@@ -59,6 +60,7 @@ services.AddDbContext<SimbirHealthContext>(options =>
 #region DI
 services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 services.AddTransient<IAuthenticationService, AuthenticationService>();
+services.AddTransient<IAccountService, AccountService>();
 services.AddScoped<ITokenService, TokenService>();
 #endregion
 
@@ -75,7 +77,10 @@ services.AddAuthorization(options =>
 
 IdentityModelEventSource.ShowPII = true;
 
-builder.WebHost.UseKestrel().UseUrls("http://*:8080").UseIISIntegration();
+if (builder.Environment.IsProduction())
+{
+    builder.WebHost.UseKestrel().UseUrls("http://*:8080").UseIISIntegration();
+}
 
 var app = builder.Build();
 

@@ -27,5 +27,11 @@ namespace SimbirHealth.Common.Repositories
         /// <param name="token"></param>
         /// <returns>Кол-во записанных элементов</returns>
         Task<int> SaveChangesAsync(CancellationToken token = default);
+        /// <summary>
+        /// Обновить сущность
+        /// </summary>
+        /// <param name="updatedEntity">Обновленная версия сущности</param>
+        /// <returns></returns>
+        TEntity Update(TEntity updatedEntity);
     }
 }

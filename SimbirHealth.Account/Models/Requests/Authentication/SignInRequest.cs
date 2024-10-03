@@ -1,4 +1,4 @@
-﻿namespace SimbirHealth.Account.Models.Requests
+﻿namespace SimbirHealth.Account.Models.Requests.Authentication
 {
     /// <summary>
     /// Запрос на вход пользователя в систему

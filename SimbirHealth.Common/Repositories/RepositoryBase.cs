@@ -36,5 +36,10 @@ namespace SimbirHealth.Common.Repositories
         /// <inheritdoc/>
         /// </summary>
         public async Task<int> SaveChangesAsync(CancellationToken token = default) => await _db.SaveChangesAsync(token);
+        
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public TEntity Update(TEntity updatedEntity) => _db.Update(updatedEntity).Entity;
     }
 }
