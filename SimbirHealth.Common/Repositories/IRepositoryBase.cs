@@ -17,10 +17,20 @@ namespace SimbirHealth.Common.Repositories
         /// </summary>
         TEntity Add(TEntity entity);
         /// <summary>
+        /// Добавить несколько сущностей в БД
+        /// </summary>
+        /// <param name="entities"></param>
+        void AddRange(List<TEntity> entities);
+        /// <summary>
         /// Удалить сущность из БД
         /// </summary>
         /// <param name="entity"></param>
         void Delete(TEntity entity);
+        /// <summary>
+        /// Удалить несколько сущностей из БД
+        /// </summary>
+        /// <param name="entity"></param>
+        void DeleteRange(List<TEntity> entities);
         /// <summary>
         /// Сохранить изменения в БД
         /// </summary>

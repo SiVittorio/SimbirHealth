@@ -25,7 +25,17 @@ namespace SimbirHealth.Common.Repositories
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public void AddRange(List<TEntity> entities) => _db.AddRange(entities);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public void Delete(TEntity entity) => _db.Remove(entity);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void DeleteRange(List<TEntity> entities) => _db.RemoveRange(entities);
 
         /// <summary>
         /// <inheritdoc/>

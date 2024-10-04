@@ -21,7 +21,13 @@ namespace SimbirHealth.Account.Controllers
             _logger = logger;
             _accountService = accountService;
         }
-
+        /// <summary>
+        /// Получение данных о текущем аккаунте
+        /// </summary>
+        /// <remarks>
+        /// Только авторизованные пользователи
+        /// </remarks>
+        /// <returns></returns>
         [HttpGet("[action]")]
         [Authorize]
         public async Task<MeResponse?> Me()
@@ -38,6 +44,14 @@ namespace SimbirHealth.Account.Controllers
             }
         }
 
+        /// <summary>
+        /// Обновление своего аккаунта
+        /// </summary>
+        /// <remarks>
+        ///  Только авторизованные пользователи
+        /// </remarks>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut("[action]")]
         [Authorize]
         public async Task<IResult> Update([FromBody] UpdateRequest request)
@@ -53,17 +67,61 @@ namespace SimbirHealth.Account.Controllers
             }
         }
 
+        /// <summary>
+        /// Получение списка всех аккаунтов
+        /// </summary>
+        /// <remarks>
+        /// Только администраторы
+        /// </remarks>
+        /// <param name="from">Начало выборки</param>
+        /// <param name="count">Конец выборки</param>
+        /// <returns>Список аккаунтов</returns>
         [HttpGet]
         [Authorize(Roles = PossibleRoles.Admin)]
-        public async Task<IResult> Accounts()
+        public async Task<List<AccountModel>> Accounts([FromQuery] int from , [FromQuery] int count)
         {
-            return Results.Ok();
+            return await _accountService.SelectAll(from, count);
         }
 
+        /// <summary>
+        /// Создание администратором нового аккаунта
+        /// </summary>
+        /// <remarks>
+        /// Только администраторы
+        /// </remarks>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<AccountModel> Accounts(AccountModel model)
+        [Authorize(Roles = PossibleRoles.Admin)]
+        public async Task<IResult> Accounts([FromBody] AdminPostPutAccountRequest request)
         {
-            return model;
+            return await _accountService.Create(request);
+        }
+
+        /// <summary>
+        /// Редактирование администратором аккаунта
+        /// </summary>
+        /// <remarks>
+        /// Только администраторы
+        /// </remarks>
+        [HttpPut("{id}")]
+        [Authorize(Roles = PossibleRoles.Admin)]
+        public async Task<IResult> Accounts([FromBody] AdminPostPutAccountRequest request, [FromRoute] Guid id)
+        {
+            return await _accountService.Update(request, id);
+        }
+
+        /// <summary>
+        /// Мягкое удаление аккаунта по id
+        /// </summary>
+        /// <remarks>
+        /// Только администраторы
+        /// </remarks>
+        [HttpDelete("{id}")]
+        [Authorize(Roles = PossibleRoles.Admin)]
+        public async Task<IResult> Accounts([FromRoute] Guid id)
+        {
+            return await _accountService.Delete(id);
         }
 
 

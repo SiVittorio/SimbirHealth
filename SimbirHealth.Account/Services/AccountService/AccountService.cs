@@ -4,18 +4,29 @@ using SimbirHealth.Account.Models.Responses.Account;
 using SimbirHealth.Common.Repositories;
 using SimbirHealth.Common.Services;
 using SimbirHealth.Data.Models.Account;
+using System.Data;
+using System.Security.Principal;
 
 namespace SimbirHealth.Account.Services.AccountService
 {
     public class AccountService : IAccountService
     {
         private readonly IRepositoryBase<AccountModel> _accountRepository;
+        private readonly IRepositoryBase<Role> _roleRepository;
+        private readonly IRepositoryBase<AccountToRole> _accountToRoleRepository;
 
-        public AccountService(IRepositoryBase<AccountModel> accountRepository)
+        public AccountService(IRepositoryBase<AccountModel> accountRepository,
+            IRepositoryBase<Role> roleRepository, 
+            IRepositoryBase<AccountToRole> accountToRoleRepository)
         {
             _accountRepository = accountRepository;
+            _roleRepository = roleRepository;
+            _accountToRoleRepository = accountToRoleRepository;
         }
-
+        /// <summary>
+        /// Получить информацию об аккаунте по Guid
+        /// </summary>
+        /// <param name="guid">Guid аккаунта</param>
         public async Task<MeResponse?> Me(Guid guid)
         {
             AccountModel? account = await TakeAccount(guid);
@@ -25,6 +36,13 @@ namespace SimbirHealth.Account.Services.AccountService
                 account.Username) : null;
         }
 
+        /// <summary>
+        /// Обновить информацию об аккаунте.
+        /// Простой вариант (для обычных пользователей)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="guid"></param>
+        /// <returns></returns>
         public async Task<IResult> Update(UpdateRequest request, Guid guid)
         {
             AccountModel? account = await TakeAccount(guid);
@@ -45,9 +63,110 @@ namespace SimbirHealth.Account.Services.AccountService
             }
         }
 
+        /// <summary>
+        /// Получить список существующих аккаунтов,
+        /// выборка начинается с конкретной сущности и берется определенное их число
+        /// </summary>
+        /// <param name="from">Начиная с какой сущности брать</param>
+        /// <param name="count">Максимальное число сущностей</param>
+        public async Task<List<AccountModel>> SelectAll(int from, int count)
+        {
+            return await _accountRepository
+                .Query()
+                .OrderBy(a => a.DateCreate)
+                .Skip(from - 1)
+                .Take(count)
+                .Include(a => a.Roles)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Добавление нового пользователя администратором 
+        /// </summary>
+        /// <param name="request">Запрос с данными нового аккаунта</param>
+        public async Task<IResult> Create(AdminPostPutAccountRequest request)
+        {
+            if (await _accountRepository.Query().AnyAsync(p => p.Username == request.Username))
+                return Results.BadRequest("Пользователь с таким Username уже есть");
+            else
+            {
+                AccountModel account = new AccountModel(
+                    request.LastName,
+                    request.FirstName,
+                    request.Username,
+                    Hasher.Hash(request.Password));
+
+                var roles = new List<Role>();
+                var links = new List<AccountToRole>();
+                try { (roles, links) = await ValidateRoles(request.Roles, account); }
+                catch (Exception ex) { return Results.BadRequest(ex.Message); }
+
+                account.Roles = roles;
+                _accountToRoleRepository.AddRange(links);
+
+                await _accountRepository.SaveChangesAsync();
+                return Results.Created();
+
+            }
+        }
+
+        /// <summary>
+        /// Обновление пользователя администратором 
+        /// </summary>
+        /// <param name="request">Запрос с данными</param>
+        /// <param name="id">Guid обновляемого аккаунта</param>
+        /// <returns></returns>
+        public async Task<IResult> Update(AdminPostPutAccountRequest request, Guid id)
+        {
+            var account = _accountRepository.Query().Include(a => a.AccountToRoles).FirstOrDefault(a => a.Guid == id);
+            if (account == null)
+                return Results.BadRequest("Редактируемый пользователь не найден");
+            else
+            {
+                account.LastName = request.LastName;
+                account.FirstName = request.FirstName;
+                account.Password = Hasher.Hash(request.Password);
+                account.Username = request.Username;
+
+                var roles = new List<Role>();
+                var links = new List<AccountToRole>();
+                try { (roles, links) = await ValidateRoles(request.Roles, account); }
+                catch (Exception ex) { return Results.BadRequest(ex.Message); }
+
+                _accountToRoleRepository.DeleteRange(account.AccountToRoles!);
+
+                account.Roles = roles;
+                _accountToRoleRepository.AddRange(links);
+                _accountRepository.Update(account);
+
+                await _accountRepository.SaveChangesAsync();
+                return Results.Ok();
+            }
+        }
+
         private async Task<AccountModel?> TakeAccount(Guid guid)
         {
             return await _accountRepository.Query().FirstOrDefaultAsync(a => a.Guid == guid);
+        }
+
+        private async Task<(List<Role> roles, List<AccountToRole> links)> ValidateRoles(List<string> strRoles, AccountModel owner)
+        {
+            var roles = new List<Role>();
+            var links = new List<AccountToRole>();
+            foreach (var role in strRoles)   
+            {
+                var roleDb = await _roleRepository.Query().FirstOrDefaultAsync(r => r.RoleName == role);
+                if (roleDb != null)
+                {
+                    roles.Add(roleDb);
+                    links.Add(new() { Account = owner, Role = roleDb });
+                }
+                else
+                {
+                    throw new Exception("Выбрана несуществующая роль");
+                }
+            }
+            return (roles, links);
         }
     }
 }

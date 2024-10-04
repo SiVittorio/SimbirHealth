@@ -58,7 +58,6 @@ namespace SimbirHealth.Account.Services.AuthenticationService
         /// <returns></returns>
         public async Task<IResult> SignUp(SignUpRequest request)
         {
-            var test = await _accountRepository.Query().Include(p => p.Roles).ToListAsync();
             if (await _accountRepository.Query().AnyAsync(p => p.Username == request.Username))
                 return Results.BadRequest("Пользователь с таким Username уже есть");
             else
