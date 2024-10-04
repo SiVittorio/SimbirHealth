@@ -5,6 +5,7 @@ using SimbirHealth.Account.Models.Requests.Account;
 using SimbirHealth.Account.Models.Responses.Account;
 using SimbirHealth.Account.Services.AccountService;
 using SimbirHealth.Account.Services.TokenService;
+using SimbirHealth.Data.Models.Account;
 using System.Security.Claims;
 
 namespace SimbirHealth.Account.Controllers
@@ -25,6 +26,7 @@ namespace SimbirHealth.Account.Controllers
         [Authorize]
         public async Task<MeResponse?> Me()
         {
+            _logger.LogWarning(nameof(PossibleRoles.Admin));
             if (HttpContext.User.Identity is ClaimsIdentity identity)
             {
                 IEnumerable<Claim> claims = identity.Claims;
@@ -51,10 +53,23 @@ namespace SimbirHealth.Account.Controllers
             }
         }
 
-
-        private Guid ParseGuid(IEnumerable<Claim> claims)
+        [HttpGet]
+        [Authorize(Roles = PossibleRoles.Admin)]
+        public async Task<IResult> Accounts()
         {
-            return Guid.Parse(claims.FirstOrDefault(c => c.Type == "userGuid")!.Value);
+            return Results.Ok();
+        }
+
+        [HttpPost]
+        public async Task<AccountModel> Accounts(AccountModel model)
+        {
+            return model;
+        }
+
+
+        private static Guid ParseGuid(IEnumerable<Claim> claims)
+        {
+            return Guid.Parse(claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
         }
     }
 }

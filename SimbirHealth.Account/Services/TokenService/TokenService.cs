@@ -70,7 +70,16 @@ namespace SimbirHealth.Account.Services.TokenService
 
         private JwtSecurityToken GenerateAccessToken(AccountModel account)
         {
-            Claim[] claims = [new("userGuid", account.Guid.ToString())];
+            IEnumerable<Claim> claims = [
+                new(ClaimTypes.NameIdentifier, account.Guid.ToString())//,
+                //new(ClaimTypes.Role, account.RolesToString())
+            ];
+
+            foreach (var role in account.Roles)
+            {
+                claims = claims.Append(new(ClaimTypes.Role, role.RoleName));
+            }
+
             var sign = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtInfo.SecretKey)),
                 SecurityAlgorithms.HmacSha256);
@@ -88,6 +97,7 @@ namespace SimbirHealth.Account.Services.TokenService
             var token = await _refreshTokenRepository
                 .Query()
                 .Include(t => t.Account)
+                .ThenInclude(a => a.Roles)
                 .FirstOrDefaultAsync(t => t.Token.Contains(str));
             return token;
         }

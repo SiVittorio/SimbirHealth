@@ -3,11 +3,11 @@
     /// <summary>
     /// Возможные роли, которые могут быть у одного аккаунта
     /// </summary>
-    public static class PossibleRoles
+    public struct PossibleRoles
     {
-        public static string Admin { get { return nameof(Admin); } }
-        public static string Manager { get { return nameof(Manager); } }
-        public static string Doctor { get { return nameof(Doctor); } }
-        public static string User { get { return nameof(User); } }
+        public const string Admin = "Admin";
+        public const string Manager = "Manager";
+        public const string Doctor = "Doctor";
+        public const string User = "User";
     }
 }

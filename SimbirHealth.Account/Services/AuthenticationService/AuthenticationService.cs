@@ -8,6 +8,7 @@ using SimbirHealth.Common.Services;
 using SimbirHealth.Data.Models;
 using SimbirHealth.Data.Models.Account;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace SimbirHealth.Account.Services.AuthenticationService
@@ -98,9 +99,9 @@ namespace SimbirHealth.Account.Services.AuthenticationService
             token = token.Replace("Bearer ", "");
             var validationResult = await _tokenService.ValidateToken(token);
             var claims = validationResult.Claims;
-            if (claims.ContainsKey("userGuid"))
+            if (claims.ContainsKey(ClaimTypes.NameIdentifier))
             {
-                var accGuid = Guid.Parse((string)claims["userGuid"]);
+                var accGuid = Guid.Parse((string)claims[ClaimTypes.NameIdentifier]);
                 var acc = await _accountRepository
                     .Query()
                     .Where(a => a.Guid == accGuid)

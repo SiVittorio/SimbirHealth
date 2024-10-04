@@ -49,7 +49,7 @@ namespace SimbirHealth.Common.Migrations
 
                     b.HasKey("Guid");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
 
                     b.HasData(
                         new
@@ -102,7 +102,7 @@ namespace SimbirHealth.Common.Migrations
 
                     b.HasIndex("RoleGuid");
 
-                    b.ToTable("AccountToRole");
+                    b.ToTable("AccountToRole", (string)null);
 
                     b.HasData(
                         new
@@ -143,7 +143,7 @@ namespace SimbirHealth.Common.Migrations
                     b.HasIndex("AccountGuid")
                         .IsUnique();
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("SimbirHealth.Data.Models.Account.Role", b =>
@@ -161,7 +161,7 @@ namespace SimbirHealth.Common.Migrations
 
                     b.HasKey("Guid");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new

@@ -11,6 +11,7 @@ using SimbirHealth.Account.Services.AuthenticationService;
 using SimbirHealth.Account.Services.TokenService;
 using SimbirHealth.Common;
 using SimbirHealth.Common.Repositories;
+using SimbirHealth.Data.Models.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -69,10 +70,8 @@ services.Configure<JwtInfo>(jwtSection);
 
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
     options => options.TokenValidationParameters = AccountTokenValidationParameters.DefaultParameters(jwtSection.Get<JwtInfo>()!));
-services.AddAuthorization(options =>
-{
-    options.AddPolicy("All", policy => policy.RequireClaim("userGuid"));
-});
+
+// TODO ¬озможно надо будет добавить кастомные политики -> services.AddAuthorizationBuilder().AddPolicy()
 
 
 IdentityModelEventSource.ShowPII = true;
