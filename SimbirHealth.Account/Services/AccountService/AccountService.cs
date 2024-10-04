@@ -47,20 +47,17 @@ namespace SimbirHealth.Account.Services.AccountService
         {
             AccountModel? account = await TakeAccount(guid);
 
-            if (account != null) {
-                account.FirstName = request.FirstName;
-                account.LastName = request.LastName;
-                account.Password = Hasher.Hash(request.Password); 
+            if (account == null)
+                return Results.BadRequest("Пользователь не найден");
 
-                _accountRepository.Update(account);
-                await _accountRepository.SaveChangesAsync();
+            account.FirstName = request.FirstName;
+            account.LastName = request.LastName;
+            account.Password = Hasher.Hash(request.Password);
 
-                return Results.Ok();
-            }
-            else
-            {
-                return Results.BadRequest();
-            }
+            _accountRepository.Update(account);
+            await _accountRepository.SaveChangesAsync();
+
+            return Results.Ok();
         }
 
         /// <summary>
@@ -88,61 +85,83 @@ namespace SimbirHealth.Account.Services.AccountService
         {
             if (await _accountRepository.Query().AnyAsync(p => p.Username == request.Username))
                 return Results.BadRequest("Пользователь с таким Username уже есть");
-            else
-            {
-                AccountModel account = new AccountModel(
+
+            AccountModel account = new AccountModel(
                     request.LastName,
                     request.FirstName,
                     request.Username,
                     Hasher.Hash(request.Password));
 
-                var roles = new List<Role>();
-                var links = new List<AccountToRole>();
-                try { (roles, links) = await ValidateRoles(request.Roles, account); }
-                catch (Exception ex) { return Results.BadRequest(ex.Message); }
+            var roles = new List<Role>();
+            var links = new List<AccountToRole>();
+            try { (roles, links) = await ValidateRoles(request.Roles, account); }
+            catch (Exception ex) { return Results.BadRequest(ex.Message); }
 
-                account.Roles = roles;
-                _accountToRoleRepository.AddRange(links);
+            account.Roles = roles;
+            _accountToRoleRepository.AddRange(links);
 
-                await _accountRepository.SaveChangesAsync();
-                return Results.Created();
-
-            }
+            await _accountRepository.SaveChangesAsync();
+            return Results.Created();
         }
 
         /// <summary>
         /// Обновление пользователя администратором 
         /// </summary>
         /// <param name="request">Запрос с данными</param>
-        /// <param name="id">Guid обновляемого аккаунта</param>
+        /// <param name="guid">Guid обновляемого аккаунта</param>
         /// <returns></returns>
-        public async Task<IResult> Update(AdminPostPutAccountRequest request, Guid id)
+        public async Task<IResult> Update(AdminPostPutAccountRequest request, Guid guid)
         {
-            var account = _accountRepository.Query().Include(a => a.AccountToRoles).FirstOrDefault(a => a.Guid == id);
-            if (account == null)
+            var account = _accountRepository.Query().Include(a => a.AccountToRoles).FirstOrDefault(a => a.Guid == guid);
+            
+            if (account == null) 
                 return Results.BadRequest("Редактируемый пользователь не найден");
-            else
-            {
-                account.LastName = request.LastName;
-                account.FirstName = request.FirstName;
-                account.Password = Hasher.Hash(request.Password);
-                account.Username = request.Username;
 
-                var roles = new List<Role>();
-                var links = new List<AccountToRole>();
-                try { (roles, links) = await ValidateRoles(request.Roles, account); }
-                catch (Exception ex) { return Results.BadRequest(ex.Message); }
+            account.LastName = request.LastName;
+            account.FirstName = request.FirstName;
+            account.Password = Hasher.Hash(request.Password);
+            account.Username = request.Username;
 
-                _accountToRoleRepository.DeleteRange(account.AccountToRoles!);
+            var roles = new List<Role>();
+            var links = new List<AccountToRole>();
+            try { (roles, links) = await ValidateRoles(request.Roles, account); }
+            catch (Exception ex) { return Results.BadRequest(ex.Message); }
 
-                account.Roles = roles;
-                _accountToRoleRepository.AddRange(links);
-                _accountRepository.Update(account);
+            _accountToRoleRepository.DeleteRange(account.AccountToRoles!);
 
-                await _accountRepository.SaveChangesAsync();
-                return Results.Ok();
-            }
+            account.Roles = roles;
+            _accountToRoleRepository.AddRange(links);
+            _accountRepository.Update(account);
+
+            await _accountRepository.SaveChangesAsync();
+            return Results.Ok();
         }
+
+        /// <summary>
+        /// Мягкое удаление пользователя
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public async Task<IResult> SoftDelete(Guid guid)
+        {
+            var acc = await TakeAccount(guid);
+            if (acc == null)
+                return Results.BadRequest("Удаляемый пользователь не найден");
+
+            acc.IsDeleted = true;
+            _accountRepository.Update(acc);
+            await _accountRepository.SaveChangesAsync();
+
+            return Results.Ok();
+
+        }
+
+
+
+
+
+
+
 
         private async Task<AccountModel?> TakeAccount(Guid guid)
         {

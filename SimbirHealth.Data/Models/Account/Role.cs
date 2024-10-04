@@ -13,7 +13,7 @@ namespace SimbirHealth.Data.Models.Account
     /// <summary>
     /// Роль пользователя
     /// </summary>
-    public class Role : BaseEntity
+    public class Role : BaseEntity, IDeleteable
     {
         public Role()
         {
@@ -32,6 +32,11 @@ namespace SimbirHealth.Data.Models.Account
         [Required]
         [IndexColumn(IsUnique = true)]
         public string RoleName { get; set; }
+
+        /// <summary>
+        /// Флаг для мягкого удаления
+        /// </summary>
+        public bool IsDeleted { get; set; }
 
         [JsonIgnore]
         public List<AccountModel>? Accounts { get; set; }

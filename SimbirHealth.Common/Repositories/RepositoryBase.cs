@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SimbirHealth.Data.Models._Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace SimbirHealth.Common.Repositories
 {
     public class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
-        where TEntity : class
+        where TEntity : class, IDeleteable
     {
         private readonly SimbirHealthContext _db;
 
@@ -40,7 +41,7 @@ namespace SimbirHealth.Common.Repositories
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IQueryable<TEntity> Query() => _db.Set<TEntity>().AsQueryable<TEntity>();
+        public IQueryable<TEntity> Query() => _db.Set<TEntity>().AsQueryable<TEntity>().Where(e => !e.IsDeleted);
 
         /// <summary>
         /// <inheritdoc/>

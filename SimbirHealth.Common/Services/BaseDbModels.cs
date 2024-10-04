@@ -1,4 +1,5 @@
 ﻿using SimbirHealth.Data.Models.Account;
+using SimbirHealth.Data.Models.Account.NotDbModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

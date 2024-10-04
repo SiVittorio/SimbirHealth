@@ -6,6 +6,7 @@ using SimbirHealth.Account.Models.Responses.Account;
 using SimbirHealth.Account.Services.AccountService;
 using SimbirHealth.Account.Services.TokenService;
 using SimbirHealth.Data.Models.Account;
+using SimbirHealth.Data.Models.Account.NotDbModel;
 using System.Security.Claims;
 
 namespace SimbirHealth.Account.Controllers
@@ -63,7 +64,7 @@ namespace SimbirHealth.Account.Controllers
             }
             else
             {
-                return null;
+                return Results.BadRequest();
             }
         }
 
@@ -121,7 +122,7 @@ namespace SimbirHealth.Account.Controllers
         [Authorize(Roles = PossibleRoles.Admin)]
         public async Task<IResult> Accounts([FromRoute] Guid id)
         {
-            return await _accountService.Delete(id);
+            return await _accountService.SoftDelete(id);
         }
 
 

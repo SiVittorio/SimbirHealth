@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimbirHealth.Data.Models._Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,7 +9,10 @@ using Toolbelt.ComponentModel.DataAnnotations.Schema.V5;
 
 namespace SimbirHealth.Data.Models.Account
 {
-    public class AccountToRole
+    /// <summary>
+    /// Связь многие-ко-многим между таблицами Accounts и Roles
+    /// </summary>
+    public class AccountToRole : IDeleteable
     {
         [PrimaryKey]
         public Guid AccountGuid { get; set; }
@@ -16,5 +20,6 @@ namespace SimbirHealth.Data.Models.Account
         public Guid RoleGuid { get; set; }
         public AccountModel Account { get; set; }
         public Role Role { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

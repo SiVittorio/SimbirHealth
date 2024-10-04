@@ -14,7 +14,7 @@ namespace SimbirHealth.Data.Models.Account
     /// <summary>
     /// Модель токена обновления для JWT 
     /// </summary>
-    public class RefreshToken
+    public class RefreshToken : IDeleteable
     {
         public RefreshToken() { }
         public RefreshToken(string Username, DateTime expiredDate, Guid accountGuid)
@@ -34,6 +34,11 @@ namespace SimbirHealth.Data.Models.Account
         /// </summary>
         [Required]
         public DateTime ExpiredDate { get; set; }
+        /// <summary>
+        /// Флаг для мягкого удаления
+        /// </summary>
+        public bool IsDeleted { get; set; }
+
         /// <summary>
         /// Аккаунт-владелец токена
         /// </summary>

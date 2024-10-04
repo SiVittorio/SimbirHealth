@@ -7,6 +7,7 @@ using SimbirHealth.Common.Repositories;
 using SimbirHealth.Common.Services;
 using SimbirHealth.Data.Models;
 using SimbirHealth.Data.Models.Account;
+using SimbirHealth.Data.Models.Account.NotDbModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

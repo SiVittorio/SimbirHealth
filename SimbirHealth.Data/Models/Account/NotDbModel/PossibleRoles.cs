@@ -1,4 +1,4 @@
-﻿namespace SimbirHealth.Data.Models.Account
+﻿namespace SimbirHealth.Data.Models.Account.NotDbModel
 {
     /// <summary>
     /// Возможные роли, которые могут быть у одного аккаунта

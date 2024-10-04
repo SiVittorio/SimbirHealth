@@ -13,7 +13,7 @@ namespace SimbirHealth.Data.Models.Account
     /// <summary>
     /// Аккаунт
     /// </summary>
-    public class AccountModel : BaseEntity
+    public class AccountModel : BaseEntity, IDeleteable
     {
         public AccountModel()
         {
@@ -57,6 +57,11 @@ namespace SimbirHealth.Data.Models.Account
         /// Пароль пользователя аккаунта
         /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// Удален ли пользователь
+        /// </summary>
+        public bool IsDeleted { get; set; }
 
         [JsonIgnore]
         public List<Role>? Roles { get; set; }
