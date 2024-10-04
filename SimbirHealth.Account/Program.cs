@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using SimbirHealth.Account.Models.Info;
 using SimbirHealth.Account.Services.AccountService;
 using SimbirHealth.Account.Services.AuthenticationService;
+using SimbirHealth.Account.Services.DoctorService;
 using SimbirHealth.Account.Services.TokenService;
 using SimbirHealth.Common;
 using SimbirHealth.Common.Repositories;
@@ -62,6 +63,7 @@ services.AddDbContext<SimbirHealthContext>(options =>
 services.AddTransient(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 services.AddTransient<IAuthenticationService, AuthenticationService>();
 services.AddTransient<IAccountService, AccountService>();
+services.AddTransient<IDoctorService, DoctorService>();
 services.AddScoped<ITokenService, TokenService>();
 #endregion
 
