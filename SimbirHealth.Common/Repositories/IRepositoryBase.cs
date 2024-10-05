@@ -13,6 +13,10 @@ namespace SimbirHealth.Common.Repositories
         /// </summary>
         IQueryable<TEntity> Query();
         /// <summary>
+        /// Создать запрос, учитывая записи с флагом IsDeleted = True
+        /// </summary>
+        IQueryable<TEntity> QueryWithDeleted();
+        /// <summary>
         /// Добавить сущность в БД
         /// </summary>
         TEntity Add(TEntity entity);

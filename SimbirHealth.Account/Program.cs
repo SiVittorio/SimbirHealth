@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
-using SimbirHealth.Account.Models.Info;
 using SimbirHealth.Account.Services.AccountService;
 using SimbirHealth.Account.Services.AuthenticationService;
 using SimbirHealth.Account.Services.DoctorService;
@@ -13,6 +12,7 @@ using SimbirHealth.Account.Services.TokenService;
 using SimbirHealth.Common;
 using SimbirHealth.Common.Repositories;
 using SimbirHealth.Data.Models.Account;
+using SimbirHealth.Data.Models.Account.NotDbModel;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.

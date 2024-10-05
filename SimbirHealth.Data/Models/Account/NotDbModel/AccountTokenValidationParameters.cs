@@ -1,12 +1,8 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using SimbirHealth.Account.Models.Info;
-using System.IdentityModel.Tokens.Jwt;
-using System.Runtime;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SimbirHealth.Account.Services.TokenService
+namespace SimbirHealth.Data.Models.Account.NotDbModel
 {
     public static class AccountTokenValidationParameters
     {

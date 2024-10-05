@@ -46,6 +46,11 @@ namespace SimbirHealth.Common.Repositories
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public IQueryable<TEntity> QueryWithDeleted() => _db.Set<TEntity>().AsQueryable<TEntity>();
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public async Task<int> SaveChangesAsync(CancellationToken token = default) => await _db.SaveChangesAsync(token);
         
         /// <summary>

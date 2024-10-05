@@ -1,4 +1,4 @@
-﻿namespace SimbirHealth.Account.Models.Info
+﻿namespace SimbirHealth.Data.Models.Account.NotDbModel
 {
     public class JwtInfo
     {

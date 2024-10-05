@@ -69,7 +69,7 @@ namespace SimbirHealth.Account.Services.AccountService
         public async Task<List<AccountModel>> SelectAll(int from, int count)
         {
             return await _accountRepository
-                .Query()
+                .QueryWithDeleted()
                 .OrderBy(a => a.DateCreate)
                 .Skip(from - 1)
                 .Take(count)
@@ -83,7 +83,7 @@ namespace SimbirHealth.Account.Services.AccountService
         /// <param name="request">Запрос с данными нового аккаунта</param>
         public async Task<IResult> Create(AdminPostPutAccountRequest request)
         {
-            if (await _accountRepository.Query().AnyAsync(p => p.Username == request.Username))
+            if (await _accountRepository.QueryWithDeleted().AnyAsync(p => p.Username == request.Username))
                 return Results.BadRequest("Пользователь с таким Username уже есть");
 
             AccountModel account = new AccountModel(
@@ -112,7 +112,9 @@ namespace SimbirHealth.Account.Services.AccountService
         /// <returns></returns>
         public async Task<IResult> Update(AdminPostPutAccountRequest request, Guid guid)
         {
-            var account = _accountRepository.Query().Include(a => a.AccountToRoles).FirstOrDefault(a => a.Guid == guid);
+            var account = _accountRepository.QueryWithDeleted()
+                .Include(a => a.AccountToRoles)
+                .FirstOrDefault(a => a.Guid == guid);
             
             if (account == null) 
                 return Results.BadRequest("Редактируемый пользователь не найден");
