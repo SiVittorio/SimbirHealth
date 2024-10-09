@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решен
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimbirHealth.Hospital", "SimbirHealth.Hospital\SimbirHealth.Hospital.csproj", "{EC98AB0F-DD97-4A63-A92A-5F9077781A5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{4ABD7D5C-8AE9-42E3-86B8-B7651073255D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ABD7D5C-8AE9-42E3-86B8-B7651073255D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ABD7D5C-8AE9-42E3-86B8-B7651073255D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC98AB0F-DD97-4A63-A92A-5F9077781A5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC98AB0F-DD97-4A63-A92A-5F9077781A5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC98AB0F-DD97-4A63-A92A-5F9077781A5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC98AB0F-DD97-4A63-A92A-5F9077781A5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
