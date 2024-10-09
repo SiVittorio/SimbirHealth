@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimbirHealth.Account.Models.Requests.Doctor;
 using SimbirHealth.Account.Models.Responses.Doctor;
-using SimbirHealth.Common.Repositories;
+using SimbirHealth.Common.Services.Account;
+using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Data.Models.Account;
-using SimbirHealth.Data.Models.Account.NotDbModel;
 
 namespace SimbirHealth.Account.Services.DoctorService
 {

@@ -1,12 +1,12 @@
-﻿using SimbirHealth.Data.Models.Account;
-using SimbirHealth.Data.Models.Account.NotDbModel;
+﻿using SimbirHealth.Common.Services.Account;
+using SimbirHealth.Data.Models.Account;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimbirHealth.Common.Services
+namespace SimbirHealth.Common.Services.Db
 {
     /// <summary>
     /// Данные, добавляемые при создании БД

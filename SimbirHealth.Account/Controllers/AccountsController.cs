@@ -5,8 +5,8 @@ using SimbirHealth.Account.Models.Requests.Account;
 using SimbirHealth.Account.Models.Responses.Account;
 using SimbirHealth.Account.Services.AccountService;
 using SimbirHealth.Account.Services.TokenService;
+using SimbirHealth.Common.Services.Account;
 using SimbirHealth.Data.Models.Account;
-using SimbirHealth.Data.Models.Account.NotDbModel;
 using System.Security.Claims;
 
 namespace SimbirHealth.Account.Controllers

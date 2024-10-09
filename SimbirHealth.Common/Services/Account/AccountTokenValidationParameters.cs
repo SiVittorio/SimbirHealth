@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SimbirHealth.Data.Models.Account.NotDbModel
+namespace SimbirHealth.Common.Services.Account
 {
     public static class AccountTokenValidationParameters
     {

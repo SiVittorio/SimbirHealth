@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SimbirHealth.Common.Repositories;
+using SimbirHealth.Common.Services.Account;
+using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Data.Models.Account;
-using SimbirHealth.Data.Models.Account.NotDbModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Runtime.Intrinsics.Arm;
 using System.Security.Claims;

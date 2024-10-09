@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimbirHealth.Common.Services
+namespace SimbirHealth.Common.Services.Db
 {
     /// <summary>
     /// Сервис для получения хэша и проверки строки и её хэш-интерпретации

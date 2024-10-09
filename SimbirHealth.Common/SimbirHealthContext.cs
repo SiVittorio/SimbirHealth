@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SimbirHealth.Common.Services;
+using SimbirHealth.Common.Services.Db;
 using SimbirHealth.Data.Models.Account;
 using System.Security.Cryptography;
 

@@ -24,6 +24,9 @@ namespace SimbirHealth.Account.Controllers
         /// Регистрация нового аккаунта
         /// </summary>
         [HttpPost("[action]")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public async Task<IResult> SignUp(SignUpRequest request)
         {
             return await _authenticationService.SignUp(request);
@@ -32,8 +35,10 @@ namespace SimbirHealth.Account.Controllers
         /// Получение новой пары jwt пользователя
         /// </summary>
         /// <param name="request"></param>
-        /// <returns></returns>
         [HttpPost("[action]")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public async Task<IResult> SignIn(SignInRequest request)
         {
             return await _authenticationService.SignIn(request);

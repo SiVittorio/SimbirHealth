@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimbirHealth.Account.Models.Requests.Account;
 using SimbirHealth.Account.Models.Responses.Account;
-using SimbirHealth.Common.Repositories;
-using SimbirHealth.Common.Services;
+using SimbirHealth.Common.Services.Db;
+using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Data.Models.Account;
 using System.Data;
 using System.Security.Principal;

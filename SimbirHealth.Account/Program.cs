@@ -10,9 +10,9 @@ using SimbirHealth.Account.Services.AuthenticationService;
 using SimbirHealth.Account.Services.DoctorService;
 using SimbirHealth.Account.Services.TokenService;
 using SimbirHealth.Common;
-using SimbirHealth.Common.Repositories;
+using SimbirHealth.Common.Services.Account;
+using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Data.Models.Account;
-using SimbirHealth.Data.Models.Account.NotDbModel;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.

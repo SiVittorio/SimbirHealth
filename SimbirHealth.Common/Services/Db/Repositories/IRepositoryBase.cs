@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimbirHealth.Common.Repositories
+namespace SimbirHealth.Common.Services.Db.Repositories
 {
     public interface IRepositoryBase<TEntity>
     {

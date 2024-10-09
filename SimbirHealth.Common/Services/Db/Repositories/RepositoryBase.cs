@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimbirHealth.Common.Repositories
+namespace SimbirHealth.Common.Services.Db.Repositories
 {
     public class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
         where TEntity : class, IDeleteable
@@ -52,7 +52,7 @@ namespace SimbirHealth.Common.Repositories
         /// <inheritdoc/>
         /// </summary>
         public async Task<int> SaveChangesAsync(CancellationToken token = default) => await _db.SaveChangesAsync(token);
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
