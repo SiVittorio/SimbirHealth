@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimbirHealth.Common.Services.Account;
+using SimbirHealth.Hospital.Models.Requests.Hospital;
+using SimbirHealth.Hospital.Services.HospitalService;
 
 namespace SimbirHealth.Hospital.Controllers
 {
@@ -9,10 +11,13 @@ namespace SimbirHealth.Hospital.Controllers
     public class HospitalsController : ControllerBase
     {
         private readonly ILogger<HospitalsController> _logger;
+        private readonly IHospitalService _hospitalService;
 
-        public HospitalsController(ILogger<HospitalsController> logger)
+        public HospitalsController(ILogger<HospitalsController> logger,
+            IHospitalService hospitalService)
         {
             _logger = logger;
+            _hospitalService = hospitalService;
         }
         [HttpGet]
         [Authorize]
@@ -37,9 +42,9 @@ namespace SimbirHealth.Hospital.Controllers
 
         [HttpPost]
         [Authorize(Roles = PossibleRoles.Admin)]
-        public async Task HospitalsPost()
+        public async Task<IResult> HospitalsPost([FromBody]AddHospitalRequest request)
         {
-
+            return await _hospitalService.Create(request);
         }
 
         [HttpPut("{id}")]

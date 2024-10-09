@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using SimbirHealth.Common.Services.Account;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,9 @@ namespace SimbirHealth.Common.Services.Web
     /// </summary>
     public static class ProgramService
     {
+
+        private static readonly string _jwtSettingsPath = Path.Combine("..\\SharedData\\jwt-settings.json");
+
         /// <summary>
         /// Настройка Swagger с авторизацией Bearer 
         /// </summary>
@@ -71,7 +75,9 @@ namespace SimbirHealth.Common.Services.Web
 
         public static IServiceCollection ConfigureJwt(this  IServiceCollection services, IConfigurationSection? jwtSection)
         {
-            services.Configure<JwtInfo>(jwtSection);
+            //services.Configure<JwtInfo>(jwtSection);
+            var settings = JsonConvert.DeserializeObject<JwtInfo>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
                 options => options.TokenValidationParameters = AccountTokenValidationParameters.DefaultParameters(jwtSection.Get<JwtInfo>()!));
             // TODO Возможно надо будет добавить кастомные политики -> services.AddAuthorizationBuilder().AddPolicy()

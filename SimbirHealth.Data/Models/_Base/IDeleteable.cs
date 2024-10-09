@@ -8,6 +8,9 @@ namespace SimbirHealth.Data.Models._Base
 {
     public interface IDeleteable
     {
+        /// <summary>
+        /// Удалена ли запись
+        /// </summary>
         bool IsDeleted { get; }
     }
 }
