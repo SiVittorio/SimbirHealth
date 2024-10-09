@@ -7,7 +7,7 @@ services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 // Настройка Swagger
-ProgramService.ConfigureSwagger(services);
+ProgramService.ConfigureSwagger(services, "Hospital");
 // Настройка БД
 ProgramService.ConfigureNpgsql(services, builder.Configuration.GetConnectionString("DefaultConnection"));
 

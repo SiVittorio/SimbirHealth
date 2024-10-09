@@ -20,7 +20,7 @@ namespace SimbirHealth.Common.Services.Web
         /// <summary>
         /// Настройка Swagger с авторизацией Bearer 
         /// </summary>
-        public static IServiceCollection ConfigureSwagger(this IServiceCollection services)
+        public static IServiceCollection ConfigureSwagger(this IServiceCollection services, string serviceName)
         {
             services.AddSwaggerGen(swagger =>
             {
@@ -50,7 +50,7 @@ namespace SimbirHealth.Common.Services.Web
 
                 var basePath = AppContext.BaseDirectory;
 
-                var xmlPath = Path.Combine(basePath, "SimbirHealth.Account.xml");
+                var xmlPath = Path.Combine(basePath, "SimbirHealth." + serviceName + ".xml");
                 swagger.IncludeXmlComments(xmlPath);
             });
             return services;

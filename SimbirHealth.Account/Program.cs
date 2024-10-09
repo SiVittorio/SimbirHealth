@@ -22,7 +22,7 @@ services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 // Настройка Swagger
-ProgramService.ConfigureSwagger(services);
+ProgramService.ConfigureSwagger(services, "Account");
 // Настройка БД
 ProgramService.ConfigureNpgsql(services, builder.Configuration.GetConnectionString("DefaultConnection"));
 ProgramService.ConfigureJwt(services, builder.Configuration.GetSection(JwtInfo.SectionName));
