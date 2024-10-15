@@ -47,5 +47,10 @@ namespace SimbirHealth.Common.Services.Db.Repositories
         /// <param name="updatedEntity">Обновленная версия сущности</param>
         /// <returns></returns>
         TEntity Update(TEntity updatedEntity);
+        /// <summary>
+        /// Обновить несколько сущностей 
+        /// </summary>
+        /// <param name="updatedEntities">Сущности с изменениями</param>
+        void UpdateRange(List<TEntity> updatedEntities);
     }
 }

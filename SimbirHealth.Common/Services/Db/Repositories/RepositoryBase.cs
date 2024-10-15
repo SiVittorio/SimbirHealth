@@ -57,5 +57,10 @@ namespace SimbirHealth.Common.Services.Db.Repositories
         /// <inheritdoc/>
         /// </summary>
         public TEntity Update(TEntity updatedEntity) => _db.Update(updatedEntity).Entity;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void UpdateRange(List<TEntity> updatedEntities) => _db.UpdateRange(updatedEntities);
     }
 }

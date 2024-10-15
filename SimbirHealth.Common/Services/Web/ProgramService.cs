@@ -75,8 +75,9 @@ namespace SimbirHealth.Common.Services.Web
 
         public static IServiceCollection ConfigureJwt(this  IServiceCollection services, IConfigurationSection? jwtSection)
         {
-            //services.Configure<JwtInfo>(jwtSection);
-            var settings = JsonConvert.DeserializeObject<JwtInfo>();
+            services.Configure<JwtInfo>(jwtSection);
+            // TODO Общий конфиг для нескольких проектов
+            //var settings = JsonConvert.DeserializeObject<JwtInfo>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
                 options => options.TokenValidationParameters = AccountTokenValidationParameters.DefaultParameters(jwtSection.Get<JwtInfo>()!));

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SimbirHealth.Common.Services.Account;
 using SimbirHealth.Hospital.Models.Requests.Hospital;
+using SimbirHealth.Hospital.Models.Responses.Hospital;
 using SimbirHealth.Hospital.Services.HospitalService;
 
 namespace SimbirHealth.Hospital.Controllers
@@ -21,23 +22,23 @@ namespace SimbirHealth.Hospital.Controllers
         }
         [HttpGet]
         [Authorize]
-        public async Task Hospitals()
+        public async Task<List<GetHospitalResponse>> Hospitals([FromQuery] int from , [FromQuery] int count)
         {
-
+            return await _hospitalService.SelectAll(from, count);
         }
         
         [HttpGet("{id}")]
         [Authorize]
-        public async Task HospitalById([FromRoute] Guid id)
+        public async Task<GetHospitalResponse?> HospitalById([FromRoute] Guid id)
         {
-
+            return await _hospitalService.SelectById(id);
         }
 
         [HttpGet("{id}/Rooms")]
         [Authorize]
-        public async Task HospitalRooms([FromRoute] Guid id)
+        public async Task<List<string>> HospitalRooms([FromRoute] Guid id)
         {
-
+            return await _hospitalService.SelectRooms(id);
         }
 
         [HttpPost]
@@ -49,16 +50,16 @@ namespace SimbirHealth.Hospital.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = PossibleRoles.Admin)]
-        public async Task HospitalsPut([FromRoute] Guid id)
+        public async Task<IResult> HospitalsPut([FromBody] AddHospitalRequest request, [FromRoute] Guid id)
         {
-
+            return await _hospitalService.Update(request, id);   
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = PossibleRoles.Admin)]
-        public async Task HospitalsDelete([FromRoute] Guid id)
+        public async Task<IResult> HospitalsDelete([FromRoute] Guid id)
         {
-
+            return await _hospitalService.SoftDelete(id);
         }
     }
 }
