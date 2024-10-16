@@ -13,6 +13,18 @@ services:
     ports:
     - "8080:8080"
 
+  simbirhealth-hospital:
+    container_name: simbirhealth-hospital
+    hostname: simbirhealth-hospital
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    build:
+      context: .
+      dockerfile: SimbirHealth.Hospital/Dockerfile
+    ports:
+    - "8081:8081"
+
   db:
     image: postgres:latest
     container_name: db
