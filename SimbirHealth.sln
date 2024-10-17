@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решен
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimbirHealth.Hospital", "SimbirHealth.Hospital\SimbirHealth.Hospital.csproj", "{EC98AB0F-DD97-4A63-A92A-5F9077781A5B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimbirHealth.Timetable", "SimbirHealth.Timetable\SimbirHealth.Timetable.csproj", "{36B3CBE9-F24E-4DFE-B71E-913C800865DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{EC98AB0F-DD97-4A63-A92A-5F9077781A5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC98AB0F-DD97-4A63-A92A-5F9077781A5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC98AB0F-DD97-4A63-A92A-5F9077781A5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36B3CBE9-F24E-4DFE-B71E-913C800865DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36B3CBE9-F24E-4DFE-B71E-913C800865DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36B3CBE9-F24E-4DFE-B71E-913C800865DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36B3CBE9-F24E-4DFE-B71E-913C800865DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

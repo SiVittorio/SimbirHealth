@@ -21,10 +21,11 @@ var services = builder.Services;
 services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
-//  Swagger
+// Add Swagger
 ProgramService.ConfigureSwagger(services, "Account");
-//  
+// Add DB
 ProgramService.ConfigureNpgsql(services, builder.Configuration.GetConnectionString("DefaultConnection"));
+// Add JWT Auth
 ProgramService.ConfigureJwt(services, builder.Configuration.GetSection(JwtInfo.SectionName));
 IdentityModelEventSource.ShowPII = true;
 
