@@ -20,41 +20,74 @@ namespace SimbirHealth.Hospital.Controllers
             _logger = logger;
             _hospitalService = hospitalService;
         }
+        /// <summary>
+        /// Получение списка больниц
+        /// </summary>
+        /// <remarks>
+        /// Только авторизованные пользователи
+        /// </remarks>
         [HttpGet]
         [Authorize]
         public async Task<List<GetHospitalResponse>> Hospitals([FromQuery] int from , [FromQuery] int count)
         {
             return await _hospitalService.SelectAll(from, count);
         }
-        
+        /// <summary>
+        /// Получение информации о больнице по Id
+        /// </summary>
+        /// <remarks>
+        /// Только авторизованные пользователи
+        /// </remarks>
+        /// <param name="id">Id больницы</param>
         [HttpGet("{id}")]
         [Authorize]
         public async Task<GetHospitalResponse?> HospitalById([FromRoute] Guid id)
         {
             return await _hospitalService.SelectById(id);
         }
-
+        /// <summary>
+        /// Получение списка кабинетов больницы по Id
+        /// </summary>
+        /// <remarks>
+        /// Только авторизованные пользователи
+        /// </remarks>
+        /// <param name="id">Id больницы</param>
         [HttpGet("{id}/Rooms")]
         [Authorize]
         public async Task<List<string>> HospitalRooms([FromRoute] Guid id)
         {
             return await _hospitalService.SelectRooms(id);
         }
-
+        /// <summary>
+        /// Создание записи о новой больнице
+        /// </summary>
+        /// <remarks>
+        /// Только администраторы
+        /// </remarks>
         [HttpPost]
         [Authorize(Roles = PossibleRoles.Admin)]
         public async Task<IResult> HospitalsPost([FromBody]AddHospitalRequest request)
         {
             return await _hospitalService.Create(request);
         }
-
+        /// <summary>
+        /// Изменение информации о больнице по Id
+        /// </summary>
+        /// <remarks>
+        /// Только администраторы
+        /// </remarks>
         [HttpPut("{id}")]
         [Authorize(Roles = PossibleRoles.Admin)]
         public async Task<IResult> HospitalsPut([FromBody] AddHospitalRequest request, [FromRoute] Guid id)
         {
             return await _hospitalService.Update(request, id);   
         }
-
+        /// <summary>
+        /// Мягкое удаление записи о больнице
+        /// </summary>
+        /// <remarks>
+        /// Только администраторы
+        /// </remarks>
         [HttpDelete("{id}")]
         [Authorize(Roles = PossibleRoles.Admin)]
         public async Task<IResult> HospitalsDelete([FromRoute] Guid id)

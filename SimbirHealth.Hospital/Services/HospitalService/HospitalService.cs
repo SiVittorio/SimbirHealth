@@ -35,7 +35,12 @@ namespace SimbirHealth.Hospital.Services.HospitalService
             await _hospitalRepository.SaveChangesAsync();
             return Results.Created();
         }
-
+        /// <summary>
+        /// Выбор нескольких больниц
+        /// </summary>
+        /// <param name="from">Начиная с какой сущности брать</param>
+        /// <param name="count">Максимальное число сущностей</param>
+        /// <returns></returns>
         public async Task<List<GetHospitalResponse>> SelectAll(int from, int count)
         {
             return await _hospitalRepository
@@ -53,8 +58,11 @@ namespace SimbirHealth.Hospital.Services.HospitalService
                         )
                 .ToListAsync();
         }
-
-
+        /// <summary>
+        /// Выбрать больницу по Id
+        /// </summary>
+        /// <param name="guid">Id больницы</param>
+        /// <returns></returns>
         public async Task<GetHospitalResponse?> SelectById(Guid guid){
             
             var hospitalModel = await HospitalById(guid);
