@@ -83,12 +83,19 @@ namespace SimbirHealth.Account.Services.TokenService
             var sign = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtInfo.SecretKey)),
                 SecurityAlgorithms.HmacSha256);
-
+            #if DEBUG
+            var token = new JwtSecurityToken(
+                issuer: _jwtInfo.IssuerName,
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(30),
+                signingCredentials: sign);
+            #else
             var token = new JwtSecurityToken(
                 issuer: _jwtInfo.IssuerName,
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(_jwtInfo.AccessLiveHours).AddMinutes(_jwtInfo.AccessLiveMinutes),
                 signingCredentials: sign);
+            #endif
 
             return token;
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SimbirHealth.Account.Models.Requests.Doctor;
 using SimbirHealth.Account.Models.Responses.Doctor;
 using SimbirHealth.Account.Services.DoctorService;
@@ -30,9 +31,15 @@ namespace SimbirHealth.Account.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public async Task<List<DoctorResponse>?> AllDoctors([FromQuery] AllDoctorsRequest request)
+        [ProducesResponseType(typeof(List<DoctorResponse>), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IResult> AllDoctors([FromQuery] AllDoctorsRequest request)
         {
-            return await _doctorService.AllDoctors(request);
+            var doctors = await _doctorService.AllDoctors(request);
+            if (!doctors.IsNullOrEmpty())
+                return Results.Ok(doctors);
+            else
+                return Results.NotFound();
         }
 
         /// <summary>
@@ -45,9 +52,15 @@ namespace SimbirHealth.Account.Controllers
         /// <returns></returns>
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<DoctorResponse?> Doctor([FromRoute] Guid id)
+        [ProducesResponseType(typeof(DoctorResponse), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IResult> Doctor([FromRoute] Guid id)
         {
-            return await _doctorService.Doctor(id);
+            var doctor = await _doctorService.Doctor(id);
+            if (doctor != null)
+                return Results.Ok(doctor);
+            else
+                return Results.NotFound();
         }
     }
 }
