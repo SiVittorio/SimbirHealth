@@ -6,8 +6,8 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SimbirHealth.Data.SharedResponses;
 using SimbirHealth.Timetable.Models.Data;
-using SimbirHealth.Timetable.Models.Responses;
 
 namespace SimbirHealth.Timetable.Services.ExternalApiService
 {
@@ -22,15 +22,18 @@ namespace SimbirHealth.Timetable.Services.ExternalApiService
         }
         public async Task<string?> GetDoctorByGuid(Guid doctorGuid, string accessToken){
             var addr = string.Format("{0}/api/Doctors/{1}", _routes.AccountApi, doctorGuid);
-            var googleAddr = string.Format("http://{0}.{1}", "google", "com");
 
             var httpClient = _httpClientFactory
                 .CreateClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            
             var response = await httpClient.GetAsync(addr);
-            var rps = response.IsSuccessStatusCode;
-            //var doctorResponse = JsonConvert.DeserializeObject<DoctorResponse>(response);
-            return null;
+            DoctorResponse? doctor = null;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                doctor = JsonConvert.DeserializeObject<DoctorResponse>(response.Content.ToString());
+            }
+            return doctor != null ? doctor.FirstName : "";
         }
     }
 }

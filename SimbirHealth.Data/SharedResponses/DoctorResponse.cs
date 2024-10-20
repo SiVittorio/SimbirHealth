@@ -1,6 +1,6 @@
 using System;
 
-namespace SimbirHealth.Timetable.Models.Responses;
+namespace SimbirHealth.Data.SharedResponses;
 
 /// <summary>
 /// Ответ на запрос получения списка врачей
