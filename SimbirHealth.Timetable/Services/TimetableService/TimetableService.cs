@@ -35,7 +35,6 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             if (canMakeTimetable){
                 var room = hospital!.Rooms.Where(r => r.RoomName == request.Room).FirstOrDefault();
                 if (room != null){
-                    // FIXME Правильно ли сохраняется время в БД? 
                     if (!await IsRoomOrDoctorBusy(room.RoomGuid, doctor!.Guid, request.From, request.To)){
                         var timetable = _timetableRepository.Add(new(){
                             From = request.From,

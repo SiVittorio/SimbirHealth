@@ -25,6 +25,18 @@ services:
     ports:
     - "8081:8081"
 
+  simbirhealth-timetable:
+    container_name: simbirhealth-timetable
+    hostname: simbirhealth-timetable
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    build:
+      context: .
+      dockerfile: SimbirHealth.Timetable/Dockerfile
+    ports:
+    - "8082:8082"
+
   db:
     image: postgres:latest
     container_name: db
