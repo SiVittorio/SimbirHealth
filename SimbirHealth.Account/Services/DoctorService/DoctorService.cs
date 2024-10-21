@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimbirHealth.Account.Models.Requests.Doctor;
-using SimbirHealth.Account.Models.Responses.Doctor;
 using SimbirHealth.Common.Services.Account;
 using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Data.Models.Account;
+using SimbirHealth.Data.SharedResponses.Account;
 
 namespace SimbirHealth.Account.Services.DoctorService
 {
@@ -31,7 +31,7 @@ namespace SimbirHealth.Account.Services.DoctorService
                 .OrderBy(a => a.DateCreate)
                 .Skip(request.From - 1)
                 .Take(request.Count)
-                .Select(a => new DoctorResponse(a.FirstName, a.LastName))
+                .Select(a => new DoctorResponse(a.Guid, a.FirstName, a.LastName))
                 .ToListAsync();
         }
 
@@ -45,7 +45,7 @@ namespace SimbirHealth.Account.Services.DoctorService
             return await _accountRepository
                 .Query()
                 .Where(a => a.Roles.Contains(_doctorRole) && a.Guid == guid)
-                .Select(a => new DoctorResponse(a.FirstName, a.LastName))
+                .Select(a => new DoctorResponse(a.Guid, a.FirstName, a.LastName))
                 .FirstOrDefaultAsync();
         }
     }

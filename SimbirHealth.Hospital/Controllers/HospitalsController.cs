@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimbirHealth.Common.Services.Account;
+using SimbirHealth.Data.SharedResponses.Hospital;
 using SimbirHealth.Hospital.Models.Requests.Hospital;
-using SimbirHealth.Hospital.Models.Responses.Hospital;
 using SimbirHealth.Hospital.Services.HospitalService;
 
 namespace SimbirHealth.Hospital.Controllers
@@ -28,7 +28,7 @@ namespace SimbirHealth.Hospital.Controllers
         /// </remarks>
         [HttpGet]
         [Authorize]
-        public async Task<List<GetHospitalResponse>> Hospitals([FromQuery] int from , [FromQuery] int count)
+        public async Task<List<HospitalResponse>> Hospitals([FromQuery] int from , [FromQuery] int count)
         {
             return await _hospitalService.SelectAll(from, count);
         }
@@ -41,9 +41,15 @@ namespace SimbirHealth.Hospital.Controllers
         /// <param name="id">Id больницы</param>
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<GetHospitalResponse?> HospitalById([FromRoute] Guid id)
+        [ProducesResponseType(typeof(HospitalResponse), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IResult> HospitalById([FromRoute] Guid id)
         {
-            return await _hospitalService.SelectById(id);
+            var hospital = await _hospitalService.SelectById(id);
+            if (hospital != null)
+                return Results.Ok(hospital);
+            else
+                return Results.NotFound();
         }
         /// <summary>
         /// Получение списка кабинетов больницы по Id

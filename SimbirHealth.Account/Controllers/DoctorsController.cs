@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SimbirHealth.Account.Models.Requests.Doctor;
-using SimbirHealth.Account.Models.Responses.Doctor;
 using SimbirHealth.Account.Services.DoctorService;
+using SimbirHealth.Data.SharedResponses.Account;
 
 namespace SimbirHealth.Account.Controllers
 {

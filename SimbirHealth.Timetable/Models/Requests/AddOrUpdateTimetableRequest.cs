@@ -2,5 +2,22 @@ using System;
 
 namespace SimbirHealth.Timetable.Models.Requests;
 
-public record AddOrUpdateTimetableRequest(Guid HospitalId, Guid DoctorId,
-    DateTime From, DateTime To, string Room);
+public class AddOrUpdateTimetableRequest{
+    public AddOrUpdateTimetableRequest(Guid hospitalId,
+        Guid doctorId,
+        DateTime from,
+        DateTime to, 
+        string room)
+    {
+        HospitalId = hospitalId;
+        DoctorId = doctorId;
+        From = DateTime.SpecifyKind(from, DateTimeKind.Utc);
+        To = DateTime.SpecifyKind(to, DateTimeKind.Utc);
+        Room = room;
+    }
+    public Guid HospitalId { get; }
+    public Guid DoctorId { get; }
+    public DateTime From { get; }
+    public DateTime To { get; }
+    public string Room { get; }
+}

@@ -2,6 +2,7 @@
 using SimbirHealth.Common.Services.Db;
 using SimbirHealth.Data.Models.Account;
 using SimbirHealth.Data.Models.Hospital;
+using SimbirHealth.Data.Models.Timetable;
 using System.Security.Cryptography;
 
 namespace SimbirHealth.Common
@@ -22,6 +23,11 @@ namespace SimbirHealth.Common
         #region Hospital
         public DbSet<HospitalModel> Hospitals { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        #endregion
+
+        #region Timetable
+        public DbSet<TimetableModel> Timetables { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
         #endregion
 
 

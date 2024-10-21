@@ -1,4 +1,5 @@
 ﻿using SimbirHealth.Data.Models._Base;
+using SimbirHealth.Data.Models.Timetable;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -35,5 +36,10 @@ namespace SimbirHealth.Data.Models.Hospital
         public Guid HospitalGuid { get; set; }
         [JsonIgnore]
         public HospitalModel Hospital { get; set; }
+        /// <summary>
+        /// Расписания, привязанные к этому объекту
+        /// </summary>
+        [JsonIgnore]
+        public List<TimetableModel>? Timetables { get; set; }
     }
 }

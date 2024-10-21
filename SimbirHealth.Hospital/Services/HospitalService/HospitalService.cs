@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Data.Models.Hospital;
+using SimbirHealth.Data.SharedResponses.Hospital;
 using SimbirHealth.Hospital.Models.Requests.Hospital;
-using SimbirHealth.Hospital.Models.Responses.Hospital;
 
 namespace SimbirHealth.Hospital.Services.HospitalService
 {
@@ -41,7 +41,7 @@ namespace SimbirHealth.Hospital.Services.HospitalService
         /// <param name="from">Начиная с какой сущности брать</param>
         /// <param name="count">Максимальное число сущностей</param>
         /// <returns></returns>
-        public async Task<List<GetHospitalResponse>> SelectAll(int from, int count)
+        public async Task<List<HospitalResponse>> SelectAll(int from, int count)
         {
             return await _hospitalRepository
                 .Query()
@@ -50,11 +50,12 @@ namespace SimbirHealth.Hospital.Services.HospitalService
                 .Take(count)
                 .Include(h => h.Rooms)
                 .Select(h => 
-                    new GetHospitalResponse(
+                    new HospitalResponse(
+                        h.Guid,
                         h.Name, 
                         h.Address, 
                         h.ContactPhone, 
-                        h.Rooms.Select(r => r.Name).ToList())
+                        h.Rooms.Select(r => new RoomResponse(r.Guid, r.Name)).ToList())
                         )
                 .ToListAsync();
         }
@@ -63,7 +64,7 @@ namespace SimbirHealth.Hospital.Services.HospitalService
         /// </summary>
         /// <param name="guid">Id больницы</param>
         /// <returns></returns>
-        public async Task<GetHospitalResponse?> SelectById(Guid guid){
+        public async Task<HospitalResponse?> SelectById(Guid guid){
             
             var hospitalModel = await HospitalById(guid);
 
@@ -71,11 +72,12 @@ namespace SimbirHealth.Hospital.Services.HospitalService
                 return null;   
             }
             else{
-                return new GetHospitalResponse(
+                return new HospitalResponse(
+                    hospitalModel.Guid,
                     hospitalModel.Name,
                     hospitalModel.Address,
                     hospitalModel.ContactPhone,
-                    hospitalModel.Rooms.Select(r => r.Name).ToList());
+                    hospitalModel.Rooms.Select(r => new RoomResponse(r.Guid, r.Name)).ToList());
             }
         }
 

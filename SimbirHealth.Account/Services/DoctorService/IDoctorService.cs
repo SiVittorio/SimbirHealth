@@ -1,5 +1,5 @@
 ﻿using SimbirHealth.Account.Models.Requests.Doctor;
-using SimbirHealth.Account.Models.Responses.Doctor;
+using SimbirHealth.Data.SharedResponses.Account;
 
 namespace SimbirHealth.Account.Services.DoctorService
 {

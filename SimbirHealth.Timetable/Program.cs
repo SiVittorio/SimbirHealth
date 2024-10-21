@@ -1,8 +1,10 @@
 using Microsoft.IdentityModel.Logging;
 using SimbirHealth.Common.Services.Account;
+using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Common.Services.Web;
 using SimbirHealth.Timetable.Models.Data;
 using SimbirHealth.Timetable.Services.ExternalApiService;
+using SimbirHealth.Timetable.Services.TimetableService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +26,10 @@ services.AddOptions();
 services.Configure<ExternalApiRoutes>(builder.Configuration.GetSection(nameof(ExternalApiRoutes)));
 
 #region DI
+// FIXME scope or transient??
 services.AddScoped<IExternalApiService, ExternalApiService>();
+services.AddScoped<ITimetableService, TimetableService>();
+services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 #endregion
 
 if (builder.Environment.IsProduction())
