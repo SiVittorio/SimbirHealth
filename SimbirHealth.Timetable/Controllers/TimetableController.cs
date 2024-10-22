@@ -16,7 +16,7 @@ namespace SimbirHealth.Timetable.Controllers
     {
         private readonly ILogger<TimetableController> _logger;
         private readonly ITimetableService _timetableService;
-        private const string _managerOrDoctor = PossibleRoles.Manager+","+PossibleRoles.Doctor;
+        private const string _managerOrAdmin = PossibleRoles.Manager+","+PossibleRoles.Admin;
 
         public TimetableController(ILogger<TimetableController> logger,
         ITimetableService timetableService){
@@ -25,10 +25,16 @@ namespace SimbirHealth.Timetable.Controllers
         }
         
         [HttpPost]
-        //FIXME uncomment below
-        //[Authorize(Roles = _managerOrDoctor)]
-        public async Task<IResult> Timetable(AddOrUpdateTimetableRequest request){
+        [Authorize(Roles = _managerOrAdmin)]
+        public async Task<IResult> Timetable([FromBody]AddOrUpdateTimetableRequest request){
             return await _timetableService.PostTimetable(request, Request.Headers.Authorization.ToString().Replace("Bearer ", ""));
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = _managerOrAdmin)]
+        public async Task<IResult> Timetable([FromRoute]Guid id, [FromBody]AddOrUpdateTimetableRequest request){
+            return Results.Ok();
         }
     }
 }
+

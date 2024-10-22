@@ -21,8 +21,12 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             _externalApiService = externalApiService;
         }
 
-
-
+        /// <summary>
+        /// Создать новое расписание
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
         public async Task<IResult> PostTimetable(AddOrUpdateTimetableRequest request, string accessToken){
             var doctor = await _externalApiService.GetDoctorByGuid(request.DoctorId, accessToken);
             var hospital = await _externalApiService.GetHospitalByGuid(request.HospitalId, accessToken);
@@ -62,6 +66,19 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.BadRequest("Невозможно создать расписание, ошибка во входных данных");
         }
 
+
+        public async Task<IResult> PutTimetable(Guid guid, AddOrUpdateTimetableRequest request, string accessToken){
+            var timetable = await _timetableRepository.Query()
+                .Include(t => t.Appointments)
+                .FirstOrDefaultAsync(t => t.Guid == guid);
+            
+            if (timetable == null) return Results.BadRequest("Неверный идентификатор расписания");
+            if (timetable.Appointments.Any(a => a.IsTaken)) 
+                return Results.BadRequest("Нельзя редактировать, если есть записавшиеся на прием");
+            
+            _timetableRepository.Delete(timetable);
+            return Results.Ok();
+        }
 
         private async Task<bool> IsRoomOrDoctorBusy(Guid roomGuid, Guid doctorGuid, DateTime rFrom, DateTime rTo){
             return await _timetableRepository
