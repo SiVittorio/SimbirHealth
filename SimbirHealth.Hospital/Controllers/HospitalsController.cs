@@ -60,7 +60,7 @@ namespace SimbirHealth.Hospital.Controllers
         /// <param name="id">Id больницы</param>
         [HttpGet("{id}/Rooms")]
         [Authorize]
-        public async Task<List<string>> HospitalRooms([FromRoute] Guid id)
+        public async Task<List<RoomResponse>> HospitalRooms([FromRoute] Guid id)
         {
             return await _hospitalService.SelectRooms(id);
         }

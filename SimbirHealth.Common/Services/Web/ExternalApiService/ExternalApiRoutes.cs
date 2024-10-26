@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SimbirHealth.Timetable.Models.Data
+namespace SimbirHealth.Common.Services.Web.ExternalApiService
 {
-    public class ExternalApiRoutes{
-        public ExternalApiRoutes(){}
+    public class ExternalApiRoutes
+    {
+        public ExternalApiRoutes() { }
         public ExternalApiRoutes(string accountApi, string hospitalApi)
         {
             AccountApi = accountApi;

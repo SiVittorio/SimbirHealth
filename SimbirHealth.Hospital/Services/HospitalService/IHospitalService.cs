@@ -8,7 +8,7 @@ namespace SimbirHealth.Hospital.Services.HospitalService
         Task<IResult> Create(AddHospitalRequest request);
         Task<List<HospitalResponse>> SelectAll(int from, int count);
         Task<HospitalResponse?> SelectById(Guid guid);
-        Task<List<string>> SelectRooms(Guid guid);
+        Task<List<RoomResponse>> SelectRooms(Guid guid);
         Task<IResult> Update(AddHospitalRequest request, Guid guid);
         Task<IResult> SoftDelete(Guid guid);
     }

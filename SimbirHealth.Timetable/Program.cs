@@ -2,8 +2,7 @@ using Microsoft.IdentityModel.Logging;
 using SimbirHealth.Common.Services.Account;
 using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Common.Services.Web;
-using SimbirHealth.Timetable.Models.Data;
-using SimbirHealth.Timetable.Services.ExternalApiService;
+using SimbirHealth.Common.Services.Web.ExternalApiService;
 using SimbirHealth.Timetable.Services.TimetableService;
 
 var builder = WebApplication.CreateBuilder(args);

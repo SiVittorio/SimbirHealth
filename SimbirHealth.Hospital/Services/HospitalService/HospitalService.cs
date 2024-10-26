@@ -54,8 +54,7 @@ namespace SimbirHealth.Hospital.Services.HospitalService
                         h.Guid,
                         h.Name, 
                         h.Address, 
-                        h.ContactPhone, 
-                        h.Rooms.Select(r => new RoomResponse(r.Guid, r.Name)).ToList())
+                        h.ContactPhone)
                         )
                 .ToListAsync();
         }
@@ -76,16 +75,15 @@ namespace SimbirHealth.Hospital.Services.HospitalService
                     hospitalModel.Guid,
                     hospitalModel.Name,
                     hospitalModel.Address,
-                    hospitalModel.ContactPhone,
-                    hospitalModel.Rooms.Select(r => new RoomResponse(r.Guid, r.Name)).ToList());
+                    hospitalModel.ContactPhone);
             }
         }
 
-        public async Task<List<string>> SelectRooms(Guid guid){
+        public async Task<List<RoomResponse>> SelectRooms(Guid guid){
             return await _roomRepository
             .Query()
             .Where(r => r.HospitalGuid == guid)
-            .Select(r => r.Name)
+            .Select(r => new RoomResponse(r.Guid, r.Name))
             .ToListAsync();
         }
 
