@@ -78,5 +78,11 @@ namespace SimbirHealth.Data.Models.Account
         /// </summary>
         [JsonIgnore]
         public List<TimetableModel>? Timetables { get; set; }
+
+        /// <summary>
+        /// Талоны, на которые записан пользователь
+        /// </summary>
+        [JsonIgnore]
+        public List<Appointment>? Appointments { get; set;}
     }
 }

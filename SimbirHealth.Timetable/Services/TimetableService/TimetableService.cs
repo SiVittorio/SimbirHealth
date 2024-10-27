@@ -1,13 +1,9 @@
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
+using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
-using SimbirHealth.Common.Migrations;
 using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Common.Services.Web.ExternalApiService;
-using SimbirHealth.Data.Models.Hospital;
 using SimbirHealth.Data.Models.Timetable;
 using SimbirHealth.Data.SharedResponses.Account;
 using SimbirHealth.Data.SharedResponses.Hospital;
@@ -365,13 +361,30 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.Ok();
         }
 
-        public async Task<IResult> PostTimetable(Guid id, DateTime time, string accessToken){
+        public async Task<IResult> PostTimetable(Guid guid, DateTime time, string accessToken){
             var result = await _externalApiService.ValidateToken(accessToken);
 
             if (result == null) return Results.BadRequest();
 
-            return Results.Ok(result);
+            var appointment = await _appointmentsRepository
+                .Query()
+                .Where(a => a.TimetableGuid == guid && a.Time == time && !a.IsTaken)
+                .FirstOrDefaultAsync();
+            
+            if (appointment == null) return Results.BadRequest();
+
+            appointment.IsTaken = true;
+            var guidClaim = (JsonElement)result[ClaimTypes.NameIdentifier];
+
+            appointment.AccountGuid = guidClaim.Deserialize<Guid>();
+            _appointmentsRepository.Update(appointment);
+            await _appointmentsRepository.SaveChangesAsync();
+
+            return Results.Ok();
         }
+
+        
+
         #region PRIVATE
         private async Task<(IResult result, RoomResponse? room)> FullTimetableValidation(
             AddOrUpdateTimetableRequest request, 
