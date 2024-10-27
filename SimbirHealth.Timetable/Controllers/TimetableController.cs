@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SimbirHealth.Common.Services.Account;
+using SimbirHealth.Data.Models.Timetable;
 using SimbirHealth.Timetable.Models.Requests;
 using SimbirHealth.Timetable.Models.Responses;
 using SimbirHealth.Timetable.Services.TimetableService;
@@ -15,6 +16,7 @@ namespace SimbirHealth.Timetable.Controllers
         private readonly ILogger<TimetableController> _logger;
         private readonly ITimetableService _timetableService;
         private const string _managerOrAdmin = PossibleRoles.Manager+","+PossibleRoles.Admin;
+        private const string _managerOrAdminOrDoctor = _managerOrAdmin+","+PossibleRoles.Doctor;
 
         public TimetableController(ILogger<TimetableController> logger,
         ITimetableService timetableService){
@@ -111,6 +113,30 @@ namespace SimbirHealth.Timetable.Controllers
             from = DateTime.SpecifyKind(from, DateTimeKind.Utc);
             
             return await _timetableService.GetTimetablesByDoctor(id, from, to, GetAccessToken());
+        }   
+        /// <summary>
+        /// Получение расписания кабинета больницы
+        /// </summary>
+        /// <remarks>Только администраторы и менеджеры и врачи</remarks>
+        [HttpGet("Hospital/{id}/Room/{room}")]
+        [Authorize(Roles = _managerOrAdminOrDoctor)]
+        [ProducesResponseType(typeof(List<GetTimetableByRoomResponse>), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IResult> GetTimetableByDoctor([FromRoute]Guid id, [FromRoute] string room,
+            [FromQuery]DateTime from, DateTime to){
+            to = DateTime.SpecifyKind(to, DateTimeKind.Utc);
+            from = DateTime.SpecifyKind(from, DateTimeKind.Utc);
+            
+            return await _timetableService.GetTimetablesByRoom(id, room, from, to, GetAccessToken());
+        }   
+
+
+        [HttpGet("{id}/Appointments")]
+        [Authorize]
+        [ProducesResponseType(typeof(List<GetAppointmentResponse>), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IResult> GetTimetableByDoctor([FromRoute]Guid id){
+            return await _timetableService.GetAppointments(id);
         }   
 
 

@@ -12,7 +12,10 @@ public interface ITimetableService
     Task<IResult> SoftDeleteTimetableByDoctor(Guid doctorGuid, string accessToken);
     Task<IResult> SoftDeleteTimetableByHospital(Guid hospitalGuid, string accessToken);
     Task<IResult> GetTimetablesByHospital(Guid hospitalGuid,
-            DateTime from, DateTime to, string accessToken);
+        DateTime from, DateTime to, string accessToken);
     Task<IResult> GetTimetablesByDoctor(Guid doctorGuid,
-            DateTime from, DateTime to, string accessToken);
+        DateTime from, DateTime to, string accessToken);
+    Task<IResult> GetTimetablesByRoom(Guid hospitalGuid, 
+        string roomName, DateTime from, DateTime to, string accessToken);
+    Task<IResult> GetAppointments(Guid timetableGuid);
 }

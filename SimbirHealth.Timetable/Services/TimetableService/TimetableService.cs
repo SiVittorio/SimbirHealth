@@ -287,6 +287,84 @@ namespace SimbirHealth.Timetable.Services.TimetableService
         }
 
 
+        public async Task<IResult> GetTimetablesByRoom(Guid hospitalGuid, 
+        string roomName, DateTime from, DateTime to, string accessToken)
+        {
+            var hospital = await _externalApiService.GetHospitalByGuid(hospitalGuid, accessToken);
+
+            if (hospital == null)
+                return Results.NotFound();
+
+            var rooms = await _externalApiService.GetHospitalRoomsByGuid(hospitalGuid, accessToken);
+
+            if (rooms.IsNullOrEmpty() || !rooms!.Any(r => r.RoomName == roomName))
+                return Results.NotFound();
+            
+            var room = rooms!.First(r => r.RoomName == r.RoomName);
+
+            var timetables = await _timetableRepository
+                .Query()
+                .Include(t => t.Appointments)
+                .Where(t => t.From >= from && t.To <= to && t.HospitalGuid == hospital.Guid
+                    && t.RoomGuid == room.RoomGuid)
+                .OrderBy(t => t.From)
+                .ToListAsync();
+
+            var doctors = new Dictionary<Guid, DoctorResponse>();
+            var response = new List<GetTimetableByRoomResponse>();
+
+            foreach(var tTable in timetables){
+                (DoctorResponse? doctor, List<RoomResponse>? rooms) data;
+                if (!doctors.TryGetValue(tTable.DoctorGuid, out data.doctor))
+                    data.doctor = await _externalApiService.GetDoctorByGuid(tTable.DoctorGuid, accessToken);
+
+                if (data.doctor == null) return Results.NotFound();
+
+                doctors.Add(tTable.DoctorGuid, data.doctor);
+
+                response.Add(new(
+                    tTable.From,
+                    tTable.To,
+                    tTable.Appointments
+                    .OrderBy(a => a.Time)
+                    .Select(
+                        a => new GetAppointmentResponse(a.Time, a.IsTaken)).ToList(),
+                    string.Format("{0} {1}", data.doctor.LastName, data.doctor.FirstName)));
+
+            }
+            return Results.Ok(response);
+        }
+
+
+        public async Task<IResult> GetAppointments(Guid timetableGuid){
+            var appointments = await _appointmentsRepository
+                .Query()
+                .Where(a => a.TimetableGuid == timetableGuid && !a.IsTaken)
+                .OrderBy(a => a.Time)
+                .Select(a => new GetAppointmentResponse(a.Time, a.IsTaken))
+                .ToListAsync();
+
+            if (appointments.IsNullOrEmpty()) return Results.NotFound();
+
+            return Results.Ok(appointments);
+        }
+
+        public async Task<IResult> TakeAppointment(Guid timetableGuid, DateTime time){
+            var appointment = await _appointmentsRepository
+                .Query()
+                .Where(a => a.TimetableGuid == timetableGuid &&
+                    a.Time == time)
+                .FirstOrDefaultAsync();
+            
+            if (appointment == null) return Results.NotFound();
+
+            appointment.IsTaken = true;
+            _appointmentsRepository.Update(appointment);
+            await _appointmentsRepository.SaveChangesAsync();
+
+            return Results.Ok();
+        }
+
         #region PRIVATE
         private async Task<(IResult result, RoomResponse? room)> FullTimetableValidation(
             AddOrUpdateTimetableRequest request, 
