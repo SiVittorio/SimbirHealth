@@ -7,6 +7,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using SimbirHealth.Data.SharedResponses.Account;
 using SimbirHealth.Data.SharedResponses.Hospital;
 
@@ -52,6 +53,12 @@ namespace SimbirHealth.Common.Services.Web.ExternalApiService
             return rooms;
         }
 
+        public async Task<IDictionary<string, object>?> ValidateToken(string accessToken){
+            var addr = string.Format("{0}/api/Authentication/Validate?accessToken={1}", _routes.AccountApi, accessToken);
+
+            IDictionary<string, object>? result = await _httpClient.GetFromJsonAsync<IDictionary<string, object>>(addr);
+            return result;
+        }
         private async Task<T?> GetTFromExternalApiAsync<T>(string uri, string accessToken)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

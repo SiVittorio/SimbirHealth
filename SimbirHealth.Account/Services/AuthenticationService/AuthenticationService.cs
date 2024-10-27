@@ -81,7 +81,7 @@ namespace SimbirHealth.Account.Services.AuthenticationService
         {
             var validationResult = await _tokenService.ValidateToken(token);
             return validationResult.IsValid ? 
-                Results.Ok() : 
+                Results.Ok(validationResult.Claims) : 
                 Results.BadRequest(validationResult.Exception.ToString());
         }
 

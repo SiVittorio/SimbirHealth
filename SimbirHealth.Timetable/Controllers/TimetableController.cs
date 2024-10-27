@@ -129,16 +129,32 @@ namespace SimbirHealth.Timetable.Controllers
             
             return await _timetableService.GetTimetablesByRoom(id, room, from, to, GetAccessToken());
         }   
-
-
+        /// <summary>
+        /// Получение свободных талонов на приём.
+        /// </summary>
+        /// <remarks>Только авторизованные пользователи</remarks>
         [HttpGet("{id}/Appointments")]
         [Authorize]
         [ProducesResponseType(typeof(List<GetAppointmentResponse>), 200)]
         [ProducesResponseType(404)]
-        public async Task<IResult> GetTimetableByDoctor([FromRoute]Guid id){
+        public async Task<IResult> GetAppointments([FromRoute]Guid id){
             return await _timetableService.GetAppointments(id);
         }   
 
+        /// <summary>
+        ///  Записаться на приём
+        /// </summary>
+        /// <remarks>
+        /// Только авторизованные пользователи
+        /// </remarks>
+        [HttpPost("{id}/Appointments")]
+        [Authorize]
+        [ProducesResponseType(typeof(List<GetAppointmentResponse>), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IResult> TakeAppointment([FromRoute] Guid id, [FromBody] DateTime time){
+            time = DateTime.SpecifyKind(time, DateTimeKind.Utc);
+            return await _timetableService.PostTimetable(id, time, GetAccessToken());
+        }
 
         private string GetAccessToken(){
             return Request.Headers.Authorization.ToString().Replace("Bearer ", "");

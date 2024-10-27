@@ -365,6 +365,13 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.Ok();
         }
 
+        public async Task<IResult> PostTimetable(Guid id, DateTime time, string accessToken){
+            var result = await _externalApiService.ValidateToken(accessToken);
+
+            if (result == null) return Results.BadRequest();
+
+            return Results.Ok(result);
+        }
         #region PRIVATE
         private async Task<(IResult result, RoomResponse? room)> FullTimetableValidation(
             AddOrUpdateTimetableRequest request, 

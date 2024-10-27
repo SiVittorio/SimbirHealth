@@ -1,3 +1,4 @@
+using Microsoft.IdentityModel.Tokens;
 using SimbirHealth.Data.SharedResponses.Account;
 using SimbirHealth.Data.SharedResponses.Hospital;
 
@@ -8,4 +9,5 @@ public interface IExternalApiService
     Task<DoctorResponse?> GetDoctorByGuid(Guid doctorGuid, string accessToken);
     Task<HospitalResponse?> GetHospitalByGuid(Guid hospitalGuid, string accessToken);
     Task<List<RoomResponse>?> GetHospitalRoomsByGuid(Guid hospitalGuid, string accessToken);
+    Task<IDictionary<string, object>?> ValidateToken(string accessToken);
 }
