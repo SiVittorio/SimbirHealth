@@ -46,6 +46,14 @@ namespace SimbirHealth.Timetable.Services.TimeValidator
             
         }
 
+        /// <summary>
+        /// Разделить промежуток времени от from до to
+        /// на последовательность DateTime-объектов, 
+        /// с интервалом в 30 минут
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
         public static IEnumerable<DateTime> SplitDateRange(DateTime from,
         DateTime to)
         {

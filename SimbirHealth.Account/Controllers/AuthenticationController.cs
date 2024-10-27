@@ -6,6 +6,11 @@ using SimbirHealth.Account.Services.AuthenticationService;
 
 namespace SimbirHealth.Account.Controllers
 {
+    /// <summary>
+    /// Контроллер аутентификации.
+    ///
+    /// Содержит методы работы с JWT-токенами
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase

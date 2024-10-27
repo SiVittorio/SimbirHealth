@@ -2,7 +2,9 @@ using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SimbirHealth.Common.Services.Account;
 using SimbirHealth.Common.Services.Db.Repositories;
+using SimbirHealth.Common.Services.Web.AuthValidationService;
 using SimbirHealth.Common.Services.Web.ExternalApiService;
 using SimbirHealth.Data.Models.Timetable;
 using SimbirHealth.Data.SharedResponses.Account;
@@ -18,18 +20,19 @@ namespace SimbirHealth.Timetable.Services.TimetableService
         private readonly IRepositoryBase<TimetableModel> _timetableRepository;
         private readonly IRepositoryBase<Appointment> _appointmentsRepository;
         private readonly IExternalApiService _externalApiService;
-
-
+        private readonly IAuthValidationService _authValidationService;
         private const string doctorNotValid = "Неверный идентификатор врача";
         private const string timetableNotValid = "Неверный идентификатор расписания";
         private const string hospitalNotValid = "Неверный идентификатор больницы";
 
         public TimetableService(IRepositoryBase<TimetableModel> timetableRepository,
         IRepositoryBase<Appointment> appointmentsRepository,
-        IExternalApiService externalApiService){
+        IExternalApiService externalApiService,
+        IAuthValidationService authValidationService){
             _timetableRepository = timetableRepository;
             _appointmentsRepository = appointmentsRepository;
             _externalApiService = externalApiService;
+            _authValidationService = authValidationService;
         }
 
         /// <summary>
@@ -123,7 +126,11 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.Ok("Расписание обновлено");
         }
 
-
+        /// <summary>
+        /// Мягкое удаление расписания по Guid
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
         public async Task<IResult> SoftDeleteTimetable(Guid guid){
             var timetable = await _timetableRepository.Query()
                 .Include(t => t.Appointments)
@@ -140,6 +147,12 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.Ok();
         }
 
+        /// <summary>
+        /// Мягкое удаление расписания по Guid врача
+        /// </summary>
+        /// <param name="doctorGuid"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
         public async Task<IResult> SoftDeleteTimetableByDoctor(Guid doctorGuid, string accessToken){
             
             if (await _externalApiService.GetDoctorByGuid(doctorGuid, accessToken) == null)
@@ -163,6 +176,12 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.Ok();
         }
 
+        /// <summary>
+        /// Мягкое удаление расписания по Guid больницы
+        /// </summary>
+        /// <param name="hospitalGuid"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
         public async Task<IResult> SoftDeleteTimetableByHospital(Guid hospitalGuid, string accessToken)
         {
             if (await _externalApiService.GetHospitalByGuid(hospitalGuid, accessToken) == null)
@@ -185,6 +204,14 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.Ok();
         }
 
+        /// <summary>
+        /// Получить расписания больницы
+        /// </summary>
+        /// <param name="hospitalGuid"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
         public async Task<IResult> GetTimetablesByHospital(Guid hospitalGuid,
             DateTime from, DateTime to, string accessToken)
         {
@@ -227,7 +254,7 @@ namespace SimbirHealth.Timetable.Services.TimetableService
                     tTable.Appointments
                     .OrderBy(a => a.Time)
                     .Select(
-                        a => new GetAppointmentResponse(a.Time, a.IsTaken)).ToList(),
+                        a => new GetAppointmentResponse(a.Guid, a.Time, a.IsTaken)).ToList(),
                     room.RoomName,
                     string.Format("{0} {1}", data.doctor.LastName, data.doctor.FirstName)));
 
@@ -235,7 +262,14 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.Ok(response);
         }
 
-
+        /// <summary>
+        /// Получить расписание врача
+        /// </summary>
+        /// <param name="doctorGuid"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
         public async Task<IResult> GetTimetablesByDoctor(Guid doctorGuid,
             DateTime from, DateTime to, string accessToken){
             
@@ -274,7 +308,7 @@ namespace SimbirHealth.Timetable.Services.TimetableService
                     tTable.Appointments
                     .OrderBy(a => a.Time)
                     .Select(
-                        a => new GetAppointmentResponse(a.Time, a.IsTaken)).ToList(),
+                        a => new GetAppointmentResponse(a.Guid, a.Time, a.IsTaken)).ToList(),
                     data.hospital.Name,
                     room.RoomName));
 
@@ -282,7 +316,15 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.Ok(response);
         }
 
-
+        /// <summary>
+        /// Получить расписание кабинета
+        /// </summary>
+        /// <param name="hospitalGuid"></param>
+        /// <param name="roomName"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
         public async Task<IResult> GetTimetablesByRoom(Guid hospitalGuid, 
         string roomName, DateTime from, DateTime to, string accessToken)
         {
@@ -324,20 +366,24 @@ namespace SimbirHealth.Timetable.Services.TimetableService
                     tTable.Appointments
                     .OrderBy(a => a.Time)
                     .Select(
-                        a => new GetAppointmentResponse(a.Time, a.IsTaken)).ToList(),
+                        a => new GetAppointmentResponse(a.Guid, a.Time, a.IsTaken)).ToList(),
                     string.Format("{0} {1}", data.doctor.LastName, data.doctor.FirstName)));
 
             }
             return Results.Ok(response);
         }
 
-
+        /// <summary>
+        /// Получить свободные талоны для записи
+        /// </summary>
+        /// <param name="timetableGuid"></param>
+        /// <returns></returns>
         public async Task<IResult> GetAppointments(Guid timetableGuid){
             var appointments = await _appointmentsRepository
                 .Query()
                 .Where(a => a.TimetableGuid == timetableGuid && !a.IsTaken)
                 .OrderBy(a => a.Time)
-                .Select(a => new GetAppointmentResponse(a.Time, a.IsTaken))
+                .Select(a => new GetAppointmentResponse(a.Guid, a.Time, a.IsTaken))
                 .ToListAsync();
 
             if (appointments.IsNullOrEmpty()) return Results.NotFound();
@@ -345,23 +391,14 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.Ok(appointments);
         }
 
-        public async Task<IResult> TakeAppointment(Guid timetableGuid, DateTime time){
-            var appointment = await _appointmentsRepository
-                .Query()
-                .Where(a => a.TimetableGuid == timetableGuid &&
-                    a.Time == time)
-                .FirstOrDefaultAsync();
-            
-            if (appointment == null) return Results.NotFound();
-
-            appointment.IsTaken = true;
-            _appointmentsRepository.Update(appointment);
-            await _appointmentsRepository.SaveChangesAsync();
-
-            return Results.Ok();
-        }
-
-        public async Task<IResult> PostTimetable(Guid guid, DateTime time, string accessToken){
+        /// <summary>
+        /// Занять талон
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="time"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
+        public async Task<IResult> TakeAppointment(Guid guid, DateTime time, string accessToken){
             var result = await _externalApiService.ValidateToken(accessToken);
 
             if (result == null) return Results.BadRequest();
@@ -383,9 +420,48 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return Results.Ok();
         }
 
-        
+        /// <summary>
+        /// Освободить талон
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
+        public async Task<IResult> UntakeAppointment(Guid guid, string accessToken){
+            var result = await _externalApiService.ValidateToken(accessToken);
+            if (result == null) return Results.BadRequest();
+            _authValidationService.LoadClaims(result);
+
+            var appointment = await _appointmentsRepository
+                .Query()
+                .FirstOrDefaultAsync(a => a.Guid == guid && a.IsTaken && a.AccountGuid != null);
+
+            if (appointment == null)
+                return Results.BadRequest();
+
+            if (!_authValidationService.ContainsSpecificRoles([PossibleRoles.Admin, PossibleRoles.Manager]) &&
+                !_authValidationService.GuidsEqual(appointment.AccountGuid!.Value))
+                return Results.Forbid();
+            
+            appointment.AccountGuid = null;
+            appointment.IsTaken = false;
+
+            _appointmentsRepository.Update(appointment);
+            await _appointmentsRepository.SaveChangesAsync();
+
+            return Results.Ok();
+        }
 
         #region PRIVATE
+        /// <summary>
+        /// Валидация для определения возможности создания
+        /// расписания
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="doctor"></param>
+        /// <param name="hospital"></param>
+        /// <param name="rooms"></param>
+        /// <param name="timetablieGuid"></param>
+        /// <returns></returns>
         private async Task<(IResult result, RoomResponse? room)> FullTimetableValidation(
             AddOrUpdateTimetableRequest request, 
             DoctorResponse? doctor, 
@@ -404,6 +480,14 @@ namespace SimbirHealth.Timetable.Services.TimetableService
             return (Results.Ok(), room);
         }
 
+        /// <summary>
+        /// Валидация сущностей и времени, связанных с расписанием
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="doctor"></param>
+        /// <param name="hospital"></param>
+        /// <param name="rooms"></param>
+        /// <returns></returns>
         private bool CanMakeTimetable(AddOrUpdateTimetableRequest request, DoctorResponse? doctor, HospitalResponse? hospital,
             List<RoomResponse>? rooms){
             return doctor != null && 
@@ -412,6 +496,16 @@ namespace SimbirHealth.Timetable.Services.TimetableService
                 rooms!.Select(r => r.RoomName).Contains(request.Room) &&
                 TimeHelperService.ValidateInterval(request.From, request.To);
         }
+
+        /// <summary>
+        /// Имеет ли кабинет или врач запись на определенное время
+        /// </summary>
+        /// <param name="roomGuid"></param>
+        /// <param name="doctorGuid"></param>
+        /// <param name="rFrom"></param>
+        /// <param name="rTo"></param>
+        /// <param name="timetableGuid"></param>
+        /// <returns></returns>
         private async Task<bool> IsRoomOrDoctorBusy(Guid roomGuid, Guid doctorGuid, DateTime rFrom, DateTime rTo,
         Guid? timetableGuid = null){
             if (timetableGuid == null){

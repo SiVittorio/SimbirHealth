@@ -55,7 +55,7 @@ namespace SimbirHealth.Common.Services.Web
                 var basePath = AppContext.BaseDirectory;
 
                 var xmlPath = Path.Combine(basePath, "SimbirHealth." + serviceName + ".xml");
-                swagger.IncludeXmlComments(xmlPath);
+                swagger.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
             });
             return services;
         }

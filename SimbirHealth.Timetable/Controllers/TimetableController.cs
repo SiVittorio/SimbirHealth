@@ -9,6 +9,12 @@ using SimbirHealth.Timetable.Services.TimetableService;
 
 namespace SimbirHealth.Timetable.Controllers
 {
+    /// <summary>
+    /// Микросервис расписаний
+    /// 
+    /// Отвечает за расписание врачей и
+    /// больниц, а также за запись на приём пользователем. 
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class TimetableController : ControllerBase
@@ -153,7 +159,22 @@ namespace SimbirHealth.Timetable.Controllers
         [ProducesResponseType(404)]
         public async Task<IResult> TakeAppointment([FromRoute] Guid id, [FromBody] DateTime time){
             time = DateTime.SpecifyKind(time, DateTimeKind.Utc);
-            return await _timetableService.PostTimetable(id, time, GetAccessToken());
+            return await _timetableService.TakeAppointment(id, time, GetAccessToken());
+        }
+
+        /// <summary>
+        ///  Отменить запись на приём
+        /// </summary>
+        /// <remarks>
+        /// Только администраторы, менеджеры, и записавшийся пользователь
+        /// </remarks>
+        [HttpDelete("Appointments/{id}")]
+        [Authorize]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        public async Task<IResult> UntakeAppointment([FromRoute] Guid id){
+            return await _timetableService.UntakeAppointment(id, GetAccessToken());
         }
 
         private string GetAccessToken(){

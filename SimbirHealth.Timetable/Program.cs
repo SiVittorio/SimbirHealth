@@ -2,6 +2,7 @@ using Microsoft.IdentityModel.Logging;
 using SimbirHealth.Common.Services.Account;
 using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Common.Services.Web;
+using SimbirHealth.Common.Services.Web.AuthValidationService;
 using SimbirHealth.Common.Services.Web.ExternalApiService;
 using SimbirHealth.Timetable.Services.TimetableService;
 
@@ -29,6 +30,7 @@ services.Configure<ExternalApiRoutes>(builder.Configuration.GetSection(nameof(Ex
 services.AddScoped<IExternalApiService, ExternalApiService>();
 services.AddScoped<ITimetableService, TimetableService>();
 services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+services.AddScoped<IAuthValidationService, AuthValidationService>();
 #endregion
 
 if (builder.Environment.IsProduction())

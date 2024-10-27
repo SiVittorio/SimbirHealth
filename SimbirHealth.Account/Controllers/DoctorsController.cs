@@ -8,6 +8,11 @@ using SimbirHealth.Data.SharedResponses.Account;
 
 namespace SimbirHealth.Account.Controllers
 {
+    /// <summary>
+    /// Контроллер врачей.
+    /// 
+    /// Отвечает за пользователей с ролью doctor
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class DoctorsController : ControllerBase

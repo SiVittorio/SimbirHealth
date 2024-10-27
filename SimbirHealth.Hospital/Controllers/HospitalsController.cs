@@ -7,6 +7,12 @@ using SimbirHealth.Hospital.Services.HospitalService;
 
 namespace SimbirHealth.Hospital.Controllers
 {
+    /// <summary>
+    /// Контроллер больниц.
+    /// 
+    /// Отвечает за данные о больницах,
+    /// подключенных к системе
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class HospitalsController : ControllerBase

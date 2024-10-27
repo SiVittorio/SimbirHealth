@@ -11,6 +11,11 @@ using System.Security.Claims;
 
 namespace SimbirHealth.Account.Controllers
 {
+    /// <summary>
+    /// Контроллер аккаунтов.
+    /// 
+    /// Отвечает за управления данными пользователей
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase
