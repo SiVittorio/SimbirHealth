@@ -10,7 +10,7 @@ using SimbirHealth.Timetable.Services.TimetableService;
 namespace SimbirHealth.Timetable.Controllers
 {
     /// <summary>
-    /// Микросервис расписаний
+    /// Контроллер расписаний.
     /// 
     /// Отвечает за расписание врачей и
     /// больниц, а также за запись на приём пользователем. 
