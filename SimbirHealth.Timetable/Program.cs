@@ -26,7 +26,6 @@ services.AddOptions();
 services.Configure<ExternalApiRoutes>(builder.Configuration.GetSection(nameof(ExternalApiRoutes)));
 
 #region DI
-// FIXME scope or transient??
 services.AddScoped<IExternalApiService, ExternalApiService>();
 services.AddScoped<ITimetableService, TimetableService>();
 services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));

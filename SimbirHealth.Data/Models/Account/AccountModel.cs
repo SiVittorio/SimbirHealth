@@ -64,7 +64,6 @@ namespace SimbirHealth.Data.Models.Account
         /// </summary>
         public bool IsDeleted { get; set; }
 
-        [JsonIgnore]
         public List<Role>? Roles { get; set; }
         [JsonIgnore]
         public List<AccountToRole>? AccountToRoles { get; set; }

@@ -12,5 +12,6 @@ namespace SimbirHealth.Account.Services.AccountService
         Task<IResult> Create(AdminPostPutAccountRequest request);
         Task<IResult> Update(AdminPostPutAccountRequest request, Guid id);
         Task<IResult> SoftDelete(Guid guid);
+        Task<IResult> GetAccount(Guid id);
     }
 }

@@ -90,6 +90,16 @@ namespace SimbirHealth.Account.Controllers
         }
 
         /// <summary>
+        /// Получить информацию об одном аккаунте
+        /// </summary>
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IResult> GetAccount([FromRoute] Guid id)
+        {
+            return await _accountService.GetAccount(id);
+        }
+
+        /// <summary>
         /// Создание администратором нового аккаунта
         /// </summary>
         /// <remarks>

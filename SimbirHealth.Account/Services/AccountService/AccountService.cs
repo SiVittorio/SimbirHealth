@@ -4,6 +4,7 @@ using SimbirHealth.Account.Models.Responses.Account;
 using SimbirHealth.Common.Services.Db;
 using SimbirHealth.Common.Services.Db.Repositories;
 using SimbirHealth.Data.Models.Account;
+using SimbirHealth.Data.SharedResponses.Account;
 using System.Data;
 using System.Security.Principal;
 
@@ -60,6 +61,16 @@ namespace SimbirHealth.Account.Services.AccountService
             return Results.Ok();
         }
 
+        /// <summary>
+        /// Получить информацию об аккаунте
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IResult> GetAccount(Guid id){
+            var acc = await TakeAccount(id);
+            if (acc == null) return Results.BadRequest();
+            return Results.Ok(new AcccountResponse(acc.Guid, acc.FirstName, acc.LastName, acc.Roles));
+        }
         /// <summary>
         /// Получить список существующих аккаунтов,
         /// выборка начинается с конкретной сущности и берется определенное их число
@@ -167,7 +178,7 @@ namespace SimbirHealth.Account.Services.AccountService
 
         private async Task<AccountModel?> TakeAccount(Guid guid)
         {
-            return await _accountRepository.Query().FirstOrDefaultAsync(a => a.Guid == guid);
+            return await _accountRepository.Query().Include(a => a.Roles).FirstOrDefaultAsync(a => a.Guid == guid);
         }
 
         private async Task<(List<Role> roles, List<AccountToRole> links)> ValidateRoles(List<string> strRoles, AccountModel owner)

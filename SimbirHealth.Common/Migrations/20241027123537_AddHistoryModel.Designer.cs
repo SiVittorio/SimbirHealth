@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SimbirHealth.Common;
@@ -11,9 +12,11 @@ using SimbirHealth.Common;
 namespace SimbirHealth.Common.Migrations
 {
     [DbContext(typeof(SimbirHealthContext))]
-    partial class SimbirHealthContextModelSnapshot : ModelSnapshot
+    [Migration("20241027123537_AddHistoryModel")]
+    partial class AddHistoryModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,9 +238,6 @@ namespace SimbirHealth.Common.Migrations
 
                     b.Property<Guid>("HospitalGuid")
                         .HasColumnType("uuid");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
 
                     b.Property<Guid>("PacientGuid")
                         .HasColumnType("uuid");

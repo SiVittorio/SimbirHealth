@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimbirHealth.Common.Services.Db;
 using SimbirHealth.Data.Models.Account;
+using SimbirHealth.Data.Models.History;
 using SimbirHealth.Data.Models.Hospital;
 using SimbirHealth.Data.Models.Timetable;
 using System.Security.Cryptography;
@@ -28,6 +29,10 @@ namespace SimbirHealth.Common
         #region Timetable
         public DbSet<TimetableModel> Timetables { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        #endregion
+
+        #region History
+        public DbSet<HistoryModel> Histories { get; set; }
         #endregion
 
 

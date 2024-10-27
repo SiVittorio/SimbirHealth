@@ -48,5 +48,5 @@ public class AuthValidationService : IAuthValidationService
     /// </summary>
     /// <param name="guid"></param>
     /// <returns></returns>
-    public bool GuidsEqual(Guid guid) => _guidClaim != guid;
+    public bool GuidsEqual(Guid guid) => _guidClaim == guid;
 }

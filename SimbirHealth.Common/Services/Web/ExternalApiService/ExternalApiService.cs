@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SimbirHealth.Data.Models.Account;
 using SimbirHealth.Data.SharedResponses.Account;
 using SimbirHealth.Data.SharedResponses.Hospital;
 
@@ -76,6 +77,18 @@ namespace SimbirHealth.Common.Services.Web.ExternalApiService
             var rooms = await GetTFromExternalApiAsync<List<RoomResponse>>(addr, accessToken);
 
             return rooms;
+        }
+        
+        /// <summary>
+        /// Получить информацию об аккаунте из внешнего API
+        /// </summary>
+        public async Task<AcccountResponse?> GetAccountByGuid(Guid accountGuid, string accessToken)
+        {
+            var addr = string.Format("{0}/api/Accounts/{1}", _routes.AccountApi, accountGuid.ToString());
+
+            var acc = await GetTFromExternalApiAsync<AcccountResponse>(addr, accessToken);
+
+            return acc;
         }
 
         /// <summary>
