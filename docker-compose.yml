@@ -37,6 +37,18 @@ services:
     ports:
     - "8082:8082"
 
+  simbirhealth-history:
+    container_name: simbirhealth-history
+    hostname: simbirhealth-history
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    build:
+      context: .
+      dockerfile: SimbirHealth.History/Dockerfile
+    ports:
+    - "8083:8083"
+
   db:
     image: postgres:latest
     container_name: db

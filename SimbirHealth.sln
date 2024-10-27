@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimbirHealth.Hospital", "Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimbirHealth.Timetable", "SimbirHealth.Timetable\SimbirHealth.Timetable.csproj", "{36B3CBE9-F24E-4DFE-B71E-913C800865DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimbirHealth.History", "SimbirHealth.History\SimbirHealth.History.csproj", "{D927D10C-B99A-4E6E-800B-042A3CB9A1CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{36B3CBE9-F24E-4DFE-B71E-913C800865DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36B3CBE9-F24E-4DFE-B71E-913C800865DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36B3CBE9-F24E-4DFE-B71E-913C800865DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D927D10C-B99A-4E6E-800B-042A3CB9A1CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D927D10C-B99A-4E6E-800B-042A3CB9A1CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D927D10C-B99A-4E6E-800B-042A3CB9A1CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D927D10C-B99A-4E6E-800B-042A3CB9A1CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
